@@ -20,6 +20,7 @@ buildscript {
 
         glide_glide_version = '4.11.0'
         glide_compiler_version = '4.11.0'
+        firebase_analytics_version = '17.4.3'
 
         timber_version = '4.7.1'
 
@@ -33,6 +34,7 @@ buildscript {
     }
     dependencies {
         classpath "com.android.tools.build:gradle:4.0.0"
+        classpath 'com.google.gms:google-services:4.3.3'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 
         // NOTE: Do not place your application dependencies here; they belong
