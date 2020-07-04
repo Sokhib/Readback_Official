@@ -5,6 +5,8 @@
         <item name="colorPrimary">@color/light_blue_500</item>
         <item name="colorPrimaryDark">@color/light_blue_800</item>
         <item name="colorAccent">@color/indigo_a700</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
     </style>
 
     <style name="TextAppearance.AppTheme.Display.Black" parent="TextAppearance.AppTheme.Display">
