@@ -9,7 +9,10 @@
     <color name="indigo_a700">#003DE3</color>
     <color name="blue_900">#0016B0</color>
     <color name="indigo_a200">#6668FF</color>
+    <color name="grey_400">#B6B6B6</color>
 
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
+    <color name="red_500">#F54545</color>
+    <color name="yellow_900">#F78432</color>
 </resources>

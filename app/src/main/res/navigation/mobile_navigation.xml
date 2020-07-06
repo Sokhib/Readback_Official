@@ -9,5 +9,14 @@
         android:id="@+id/startFragment"
         android:name="com.sokhibdzhon.readback.ui.start.StartFragment"
         android:label="StartFragment"
-        tools:layout="@layout/start_fragment" />
+        tools:layout="@layout/start_fragment">
+        <action
+            android:id="@+id/action_startFragment_to_gameFragment"
+            app:destination="@id/gameFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/gameFragment"
+        android:name="com.sokhibdzhon.readback.ui.game.GameFragment"
+        android:label="game_fragment"
+        tools:layout="@layout/game_fragment" />
 </navigation>
