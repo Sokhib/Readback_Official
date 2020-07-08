@@ -3,6 +3,7 @@
     package="com.sokhibdzhon.readback">
 
     <application
+        android:name=".BaseApplication"
         android:allowBackup="true"
         android:fullBackupContent="true"
         android:icon="@mipmap/ic_launcher"

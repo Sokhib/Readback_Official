@@ -17,6 +17,7 @@
 
     <style name="TextAppearance.AppTheme.Display" parent="TextAppearance.AppCompat.Display1">
         <item name="android:fontFamily">@font/love_ams_sans</item>
+        <item name="android:textSize">@dimen/size_24dp</item>
     </style>
 
 </resources>

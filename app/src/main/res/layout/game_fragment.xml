@@ -1,150 +1,162 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white"
-    tools:context=".ui.game.GameFragment">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <FrameLayout
-        android:id="@+id/frameLayout"
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="350dp"
-        android:background="@drawable/ic_word_background"
-        android:gravity="center"
-        android:minHeight="300dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        tools:context=".ui.game.GameFragment">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/size_24dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        <FrameLayout
+            android:id="@+id/frameLayout"
+            android:layout_width="match_parent"
+            android:layout_height="350dp"
+            android:background="@drawable/ic_word_background"
+            android:gravity="center"
+            android:minHeight="300dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <!--        Change to icons and button  -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/size_24dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <!--        Change to icons and button  -->
+            <TextView
+                style="@style/TextAppearance.AppTheme.Display.White"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                tools:text="Exit" />
+
+            <TextView
+                style="@style/TextAppearance.AppTheme.Display.White"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                tools:text="Timeleft" />
+
+            <TextView
+                style="@style/TextAppearance.AppTheme.Display.White"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                tools:text="SCORE" />
+        </LinearLayout>
+        <!--    cover with white and animate-->
         <TextView
-            style="@style/TextAppearance.AppTheme.Display.White"
+            android:id="@+id/textView_word"
+            style="@style/TextAppearance.AppTheme.Display.Black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            tools:text="Exit" />
+            android:background="@drawable/round_white_background"
+            android:padding="@dimen/size_24dp"
+            android:text="book"
+            android:textSize="96sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/guideline"
+            tools:text="book" />
 
-        <TextView
-            style="@style/TextAppearance.AppTheme.Display.White"
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            tools:text="Timeleft" />
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="100dp" />
 
         <TextView
-            style="@style/TextAppearance.AppTheme.Display.White"
-            android:layout_width="wrap_content"
+            android:id="@+id/textView"
+            style="@style/TextAppearance.AppTheme.Display.Black"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            tools:text="SCORE" />
-    </LinearLayout>
-    <!--    cover with white and animate-->
-    <TextView
-        android:id="@+id/textView_word"
-        style="@style/TextAppearance.AppTheme.Display.White"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Book"
-        android:textSize="96sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/guideline"
-        tools:text="Book" />
+            android:layout_marginHorizontal="@dimen/size_24dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/round_white_background"
+            android:elevation="8dp"
+            android:gravity="center"
+            android:paddingVertical="8dp"
+            android:text="koob"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/frameLayout" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_begin="150dp" />
+        <TextView
+            android:id="@+id/textView1"
+            style="@style/TextAppearance.AppTheme.Display.Black"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/size_24dp"
+            android:layout_marginTop="@dimen/size_16dp"
+            android:background="@drawable/round_white_background"
+            android:elevation="@dimen/size_8dp"
+            android:gravity="center"
+            android:paddingVertical="8dp"
+            android:text="kobo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView" />
 
-    <TextView
-        android:id="@+id/textView"
-        style="@style/TextAppearance.AppTheme.Display.Black"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/size_24dp"
-        android:layout_marginTop="24dp"
-        android:background="@drawable/round_white_background"
-        android:elevation="8dp"
-        android:gravity="center"
-        android:paddingVertical="8dp"
-        android:text="Koob"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/frameLayout" />
+        <TextView
+            android:id="@+id/textView2"
+            style="@style/TextAppearance.AppTheme.Display.Black"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/size_24dp"
+            android:layout_marginTop="@dimen/size_16dp"
+            android:background="@drawable/round_white_background"
+            android:elevation="@dimen/size_8dp"
+            android:gravity="center"
+            android:paddingVertical="8dp"
+            android:text="koab"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView1" />
 
-    <TextView
-        android:id="@+id/textView1"
-        style="@style/TextAppearance.AppTheme.Display.Black"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/size_24dp"
-        android:layout_marginTop="@dimen/size_16dp"
-        android:background="@drawable/round_white_background"
-        android:elevation="@dimen/size_8dp"
-        android:gravity="center"
-        android:paddingVertical="8dp"
-        android:text="Kobo"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        <TextView
+            android:id="@+id/textView3"
+            style="@style/TextAppearance.AppTheme.Display.Black"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/size_24dp"
+            android:layout_marginTop="@dimen/size_16dp"
+            android:background="@drawable/round_white_background"
+            android:elevation="@dimen/size_8dp"
+            android:gravity="center"
+            android:paddingVertical="8dp"
+            android:text="book"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
-    <TextView
-        android:id="@+id/textView2"
-        style="@style/TextAppearance.AppTheme.Display.Black"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/size_24dp"
-        android:layout_marginTop="@dimen/size_16dp"
-        android:background="@drawable/round_white_background"
-        android:elevation="@dimen/size_8dp"
-        android:gravity="center"
-        android:paddingVertical="8dp"
-        android:text="Koab"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView1" />
+        <TextView
+            android:id="@+id/textView4"
+            style="@style/TextAppearance.AppTheme.Display.Black"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/size_24dp"
+            android:layout_marginTop="24dp"
+            android:elevation="30dp"
+            android:gravity="center"
 
-    <TextView
-        android:id="@+id/textView3"
-        style="@style/TextAppearance.AppTheme.Display.Black"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/size_24dp"
-        android:layout_marginTop="@dimen/size_16dp"
-        android:background="@drawable/round_white_background"
-        android:elevation="@dimen/size_8dp"
-        android:gravity="center"
-        android:paddingVertical="8dp"
-        android:text="Book"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+            android:text="skip"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
-    <TextView
-        android:id="@+id/textView4"
-        style="@style/TextAppearance.AppTheme.Display.Black"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/size_24dp"
-        android:layout_marginTop="24dp"
-        android:elevation="30dp"
-        android:gravity="center"
-
-        android:text="skip"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

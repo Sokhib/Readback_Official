@@ -33,6 +33,7 @@ android {
 
 dependencies {
 
+
     implementation fileTree(dir: "libs", include: ["*.jar"])
     //Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
@@ -63,8 +64,10 @@ dependencies {
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
 
     //firebase
-    implementation "com.google.firebase:firebase-analytics:$firebase_analytics_version"
+    implementation "com.google.firebase:firebase-analytics-ktx:$firebase_analytics_version"
     implementation "com.google.firebase:firebase-crashlytics:$firebase_crashlytics"
+    implementation "com.google.firebase:firebase-firestore-ktx:$firebase_firestore"
+
 
     //debugging
     implementation "com.jakewharton.timber:timber:$timber_version"

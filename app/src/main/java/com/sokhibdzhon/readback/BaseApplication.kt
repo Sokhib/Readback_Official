@@ -1,0 +1,24 @@
+package com.sokhibdzhon.readback
+
+import android.app.Application
+import com.sokhibdzhon.readback.di.AppComponent
+import com.sokhibdzhon.readback.di.DaggerAppComponent
+import timber.log.Timber
+
+
+/**     I ❤ Code:)
+╔═══════════════════════════════════════╗
+║  Created by Sokhibdzhon Saidmuratov   ║
+╠═══════════════════════════════════════╣
+║ sokhibsaid@gmail.com                  ║
+╚═══════════════════════════════════════╝
+ */
+
+class BaseApplication : Application() {
+    val appGraph: AppComponent = DaggerAppComponent.factory().create(this)
+    override fun onCreate() {
+        super.onCreate()
+        if (BuildConfig.DEBUG)
+            Timber.plant(Timber.DebugTree())
+    }
+}

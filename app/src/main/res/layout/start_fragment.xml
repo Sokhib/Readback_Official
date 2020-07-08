@@ -29,8 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:text="@string/game_desc"
-            android:textSize="24sp">
+            android:text="@string/game_desc">
 
         </TextView>
 
@@ -45,8 +44,7 @@
             android:background="@drawable/round_gradient_text_background"
             android:gravity="center"
             android:padding="@dimen/size_16dp"
-            android:text="@string/start_playing"
-            android:textSize="@dimen/text_size_24sp">
+            android:text="@string/start_playing">
 
         </TextView>
     </LinearLayout>
