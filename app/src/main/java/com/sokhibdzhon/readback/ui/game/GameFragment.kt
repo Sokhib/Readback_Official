@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.LinearInterpolator
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -15,15 +14,12 @@ import androidx.navigation.fragment.findNavController
 import com.sokhibdzhon.readback.BaseApplication
 import com.sokhibdzhon.readback.R
 import com.sokhibdzhon.readback.databinding.GameFragmentBinding
-import rjsv.circularview.CircleViewAnimation
-import rjsv.circularview.enumerators.AnimationStyle
 import javax.inject.Inject
 
 class GameFragment : Fragment(), View.OnClickListener {
 
     private lateinit var viewModel: GameViewModel
     private lateinit var binding: GameFragmentBinding
-    private lateinit var circularAnimation: CircleViewAnimation
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -55,17 +51,18 @@ class GameFragment : Fragment(), View.OnClickListener {
             textOption3.setOnClickListener(this@GameFragment)
             textOption4.setOnClickListener(this@GameFragment)
         }
-        //Animation start
-        circularAnimation = CircleViewAnimation(binding.circularTimeView)
-            .setAnimationStyle(AnimationStyle.CONTINUOUS)
-            .setDuration(binding.circularTimeView.progressValue)
-            .setTimerOperationOnFinish {
-                gameFinished()
-            }.setCustomInterpolator(LinearInterpolator())
-        //animation start
-        viewModel.animationStart.observe(viewLifecycleOwner, Observer { isStartAnimation ->
-            if (isStartAnimation) circularAnimation.start()
+        //set progressMax from viewModel or db
+        binding.circularTimeView.apply {
+            progressMax = 10f
+        }
+        binding.imageviewClose.setOnClickListener {
+            findNavController().popBackStack()
+        }
+
+        viewModel.timeLeft.observe(viewLifecycleOwner, Observer { timeLeft ->
+            binding.circularTimeView.setProgressWithAnimation(timeLeft.toFloat(), 1000)
         })
+
         //words
         viewModel.wordList.observe(viewLifecycleOwner, Observer { words ->
             if (words != null) {
@@ -81,8 +78,6 @@ class GameFragment : Fragment(), View.OnClickListener {
     }
 
     private fun gameFinished() {
-
-        circularAnimation.stop()
         Toast.makeText(requireActivity(), "Game Finished", Toast.LENGTH_SHORT).show()
         val action =
             GameFragmentDirections.actionGameFragmentToScoreFragment(viewModel.score.value ?: 0)

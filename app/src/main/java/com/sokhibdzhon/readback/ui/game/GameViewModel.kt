@@ -1,5 +1,6 @@
 package com.sokhibdzhon.readback.ui.game
 
+import android.os.CountDownTimer
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -39,15 +40,26 @@ class GameViewModel @Inject constructor(val firestoreDb: FirebaseFirestore) : Vi
     val score: LiveData<Int>
         get() = _score
 
-    private val _animationStart = MutableLiveData<Boolean>()
-    val animationStart: LiveData<Boolean>
-        get() = _animationStart
+    private val timer: CountDownTimer
+    private val _timeLeft = MutableLiveData<Long>()
+    val timeLeft: LiveData<Long>
+        get() = _timeLeft
 
     init {
         _correct.value = false
-        _animationStart.value = false
         _gameFinish.value = false
         _score.value = 0
+        timer = object : CountDownTimer(COUNTDOWN_TIME, ONE_SECOND) {
+            override fun onFinish() {
+                _gameFinish.value = true
+                _timeLeft.value = DONE
+            }
+
+            override fun onTick(millisUntilFinished: Long) {
+                _timeLeft.value = (millisUntilFinished / ONE_SECOND)
+            }
+
+        }
         getWords()
 
     }
@@ -71,7 +83,7 @@ class GameViewModel @Inject constructor(val firestoreDb: FirebaseFirestore) : Vi
                             _wordList.value!!.add(Word(correct, options, word))
                         }
                     }
-                    _animationStart.value = true
+                    timer.start()
                 }
             }
             .addOnFailureListener { exception ->
@@ -98,7 +110,7 @@ class GameViewModel @Inject constructor(val firestoreDb: FirebaseFirestore) : Vi
         }
         //TODO: lower the value
         runBlocking {
-            delay(1000)
+            delay(500)
         }
         Timber.d("${_score.value}")
         nextWord()

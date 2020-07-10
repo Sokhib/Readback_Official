@@ -73,7 +73,7 @@ dependencies {
     implementation "com.jakewharton.timber:timber:$timber_version"
 
     //timer
-    implementation "com.github.rjsvieira:circularView:$timer_version"
+    implementation "com.mikhaellopez:circularprogressbar:$timer_version"
 
     //test
     testImplementation "junit:junit:$junit_junit_version"
