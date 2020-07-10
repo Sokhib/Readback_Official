@@ -10,6 +10,9 @@
     <color name="blue_900">#0016B0</color>
     <color name="indigo_a200">#6668FF</color>
     <color name="grey_400">#B6B6B6</color>
+    <color name="grey_300">#E0E0E0</color>
+    <color name="grey_200">#EEEEEE</color>
+    <color name="grey_200_alpha">#26EEEEEE</color>
 
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>

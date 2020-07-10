@@ -18,5 +18,20 @@
         android:id="@+id/gameFragment"
         android:name="com.sokhibdzhon.readback.ui.game.GameFragment"
         android:label="game_fragment"
-        tools:layout="@layout/game_fragment" />
+        tools:layout="@layout/game_fragment">
+        <action
+            android:id="@+id/action_gameFragment_to_scoreFragment"
+            app:destination="@id/scoreFragment"
+            app:popUpTo="@id/startFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/scoreFragment"
+        android:name="com.sokhibdzhon.readback.ui.score.ScoreFragment"
+        android:label="score_fragment"
+        tools:layout="@layout/score_fragment">
+        <argument
+            android:name="score"
+            android:defaultValue="0"
+            app:argType="integer" />
+    </fragment>
 </navigation>

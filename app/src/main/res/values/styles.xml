@@ -6,18 +6,4 @@
         <item name="colorPrimaryDark">@color/grey_400</item>
         <item name="colorAccent">@color/indigo_a700</item>
     </style>
-
-    <style name="TextAppearance.AppTheme.Display.Black" parent="TextAppearance.AppTheme.Display">
-        <item name="android:textColor">@color/black</item>
-    </style>
-
-    <style name="TextAppearance.AppTheme.Display.White" parent="TextAppearance.AppTheme.Display">
-        <item name="android:textColor">@color/white</item>
-    </style>
-
-    <style name="TextAppearance.AppTheme.Display" parent="TextAppearance.AppCompat.Display1">
-        <item name="android:fontFamily">@font/love_ams_sans</item>
-        <item name="android:textSize">@dimen/size_24dp</item>
-    </style>
-
 </resources>

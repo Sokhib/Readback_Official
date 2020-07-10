@@ -72,6 +72,9 @@ dependencies {
     //debugging
     implementation "com.jakewharton.timber:timber:$timber_version"
 
+    //timer
+    implementation "com.github.rjsvieira:circularView:$timer_version"
+
     //test
     testImplementation "junit:junit:$junit_junit_version"
     androidTestImplementation "androidx.test.ext:junit:$ext_junit_version"
