@@ -5,15 +5,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.sokhibdzhon.readback.BaseApplication
 import com.sokhibdzhon.readback.R
 import com.sokhibdzhon.readback.databinding.GameFragmentBinding
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 class GameFragment : Fragment(), View.OnClickListener {
@@ -53,7 +59,7 @@ class GameFragment : Fragment(), View.OnClickListener {
         }
         //set progressMax from viewModel or db
         binding.circularTimeView.apply {
-            progressMax = 10f
+            progressMax = 60f
         }
         binding.imageviewClose.setOnClickListener {
             findNavController().popBackStack()
@@ -66,8 +72,8 @@ class GameFragment : Fragment(), View.OnClickListener {
         //words
         viewModel.wordList.observe(viewLifecycleOwner, Observer { words ->
             if (words != null) {
-                binding.progressGamestart.visibility = View.INVISIBLE
                 viewModel.nextWord()
+                binding.progressGamestart.visibility = View.INVISIBLE
             }
         })
 
@@ -79,27 +85,28 @@ class GameFragment : Fragment(), View.OnClickListener {
 
     private fun gameFinished() {
         Toast.makeText(requireActivity(), "Game Finished", Toast.LENGTH_SHORT).show()
+        runBlocking {
+            delay(500)
+        }
         val action =
             GameFragmentDirections.actionGameFragmentToScoreFragment(viewModel.score.value ?: 0)
         findNavController().navigate(action)
     }
 
     override fun onClick(v: View?) {
-        when (v!!.id) {
-            binding.textOption1.id -> {
-                viewModel.checkForCorrectness(binding.textOption1.text.toString())
-
-            }
-            binding.textOption2.id -> {
-                viewModel.checkForCorrectness(binding.textOption2.text.toString())
-            }
-            binding.textOption3.id -> {
-                viewModel.checkForCorrectness(binding.textOption3.text.toString())
-            }
-            binding.textOption4.id -> {
-                viewModel.checkForCorrectness(binding.textOption4.text.toString())
+        viewModel.checkForCorrectness((v as TextView).text.toString())
+        v.background = if (viewModel.isCorrect() != null && viewModel.isCorrect()!!) {
+            resources.getDrawable(R.drawable.round_stroke_green_background, requireContext().theme)
+        } else {
+            resources.getDrawable(R.drawable.round_stroke_red_background, requireContext().theme)
+        }
+        lifecycleScope.launch {
+            coroutineScope {
+                delay(500)
+                v.background =
+                    resources.getDrawable(R.drawable.round_white_background, requireContext().theme)
+                viewModel.nextWord()
             }
         }
     }
-
 }

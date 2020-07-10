@@ -6,8 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.FirebaseFirestore
 import com.sokhibdzhon.readback.data.model.Word
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -15,7 +13,7 @@ private const val LEVELS = "levels"
 private const val WORDS = "words"
 private const val DONE = 0L
 private const val ONE_SECOND = 1000L
-private const val COUNTDOWN_TIME = 10000L
+private const val COUNTDOWN_TIME = 60000L
 
 class GameViewModel @Inject constructor(val firestoreDb: FirebaseFirestore) : ViewModel() {
 
@@ -108,11 +106,7 @@ class GameViewModel @Inject constructor(val firestoreDb: FirebaseFirestore) : Vi
             _correct.value = false
             _score.value = (score.value)?.minus(5)
         }
-        //TODO: lower the value
-        runBlocking {
-            delay(500)
-        }
-        Timber.d("${_score.value}")
-        nextWord()
     }
+
+    fun isCorrect() = correct.value
 }
