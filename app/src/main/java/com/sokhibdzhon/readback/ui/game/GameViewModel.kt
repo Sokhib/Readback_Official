@@ -91,6 +91,7 @@ class GameViewModel @Inject constructor(val firestoreDb: FirebaseFirestore) : Vi
 
     fun nextWord() {
         if (!_wordList.value.isNullOrEmpty()) {
+            _wordList.value!!.shuffle()
             _current.value = _wordList.value!!.removeAt(0)
         } else {
             _gameFinish.value = true
@@ -109,4 +110,7 @@ class GameViewModel @Inject constructor(val firestoreDb: FirebaseFirestore) : Vi
     }
 
     fun isCorrect() = correct.value
+    fun onGameFinished() {
+        _gameFinish.value = false
+    }
 }

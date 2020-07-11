@@ -83,6 +83,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/round_white_background"
+            android:elevation="@dimen/size_16dp"
             android:padding="@dimen/size_24dp"
             android:text="@{gmviewmodel.current.word}"
             android:textAppearance="@style/TextAppearance.AppTheme.Display.Black"
@@ -97,7 +98,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_begin="120dp" />
+            app:layout_constraintGuide_begin="140dp" />
 
         <TextView
             android:id="@+id/text_option_1"

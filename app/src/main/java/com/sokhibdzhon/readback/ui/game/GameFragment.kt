@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -22,6 +21,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
+
+// TODO: making view's disabled if words are not loaded yet.
+// TODO: Too many clicks on options fix
 class GameFragment : Fragment(), View.OnClickListener {
 
     private lateinit var viewModel: GameViewModel
@@ -79,12 +81,14 @@ class GameFragment : Fragment(), View.OnClickListener {
 
         //Game finish
         viewModel.gameFinish.observe(viewLifecycleOwner, Observer { hasFinished ->
-            if (hasFinished) gameFinished()
+            if (hasFinished) {
+                gameFinished()
+                viewModel.onGameFinished()
+            }
         })
     }
 
     private fun gameFinished() {
-        Toast.makeText(requireActivity(), "Game Finished", Toast.LENGTH_SHORT).show()
         runBlocking {
             delay(500)
         }
