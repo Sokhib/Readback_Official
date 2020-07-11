@@ -61,10 +61,15 @@ class GameFragment : Fragment(), View.OnClickListener {
         }
         //set progressMax from viewModel or db
         binding.circularTimeView.apply {
-            progressMax = 60f
+            progressMax = 30f
         }
         binding.imageviewClose.setOnClickListener {
             findNavController().popBackStack()
+        }
+        //skip
+        binding.skip.setOnClickListener {
+            viewModel.nextWord()
+            startAnimation()
         }
 
         viewModel.timeLeft.observe(viewLifecycleOwner, Observer { timeLeft ->
@@ -75,7 +80,7 @@ class GameFragment : Fragment(), View.OnClickListener {
         viewModel.wordList.observe(viewLifecycleOwner, Observer { words ->
             if (words != null) {
                 viewModel.nextWord()
-                binding.progressGamestart.visibility = View.INVISIBLE
+                startAnimation()
             }
         })
 
@@ -110,7 +115,15 @@ class GameFragment : Fragment(), View.OnClickListener {
                 v.background =
                     resources.getDrawable(R.drawable.round_white_background, requireContext().theme)
                 viewModel.nextWord()
+                startAnimation()
             }
+        }
+    }
+
+    private fun startAnimation() {
+        with(binding.motionLayout) {
+            setTransition(R.id.start, R.id.end)
+            transitionToEnd()
         }
     }
 }
