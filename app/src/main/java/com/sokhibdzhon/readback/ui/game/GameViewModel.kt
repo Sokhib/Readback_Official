@@ -67,18 +67,18 @@ class GameViewModel @Inject constructor(val firestoreDb: FirebaseFirestore) : Vi
         firestoreDb.collection(LEVELS).document(levelFromDb.toString()).collection(WORDS)
             .get()
             .addOnSuccessListener { document ->
-                if (document != null) {
-                    for (word in document.documents) {
-                        val options = word.get("options") as MutableList<String>
+                document?.let { doc ->
+                    for (currentWord in doc.documents) {
+                        val options = currentWord.get("options") as MutableList<String>
                         options.shuffle()
-                        val correct = word.get("correct") as String
-                        val word = word.get("word") as String
+                        val correct = currentWord.get("correct") as String
+                        val word = currentWord.get("word") as String
                         Timber.d("correct: $correct --> options: $options --> word: $word")
-                        if (_wordList.value == null) {
+                        _wordList.value?.let {
+                            _wordList.value!!.add(Word(correct, options, word))
+                        } ?: run {
                             _wordList.value = mutableListOf(Word(correct, options, word))
                             Timber.d("Word added")
-                        } else {
-                            _wordList.value!!.add(Word(correct, options, word))
                         }
                     }
                     timer.start()

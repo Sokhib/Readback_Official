@@ -76,7 +76,7 @@ class GameFragment : Fragment(), View.OnClickListener {
 
         //words
         viewModel.wordList.observe(viewLifecycleOwner, Observer { words ->
-            if (words != null) {
+            words?.let {
                 binding.progressWordLoad.visibility = View.GONE
                 viewModel.nextWord()
                 startAnimation()
@@ -104,10 +104,19 @@ class GameFragment : Fragment(), View.OnClickListener {
     override fun onClick(v: View?) {
         viewModel.checkForCorrectness((v as TextView).text.toString())
         isActiveOptions(false)
-        v.background = if (viewModel.isCorrect() != null && viewModel.isCorrect()!!) {
-            resources.getDrawable(R.drawable.round_stroke_green_background, requireContext().theme)
-        } else {
-            resources.getDrawable(R.drawable.round_stroke_red_background, requireContext().theme)
+        viewModel.isCorrect()?.let { isCorrect ->
+            v.background = if (isCorrect) {
+                resources.getDrawable(
+                    R.drawable.round_stroke_green_background,
+                    requireContext().theme
+                )
+            } else {
+                resources.getDrawable(
+                    R.drawable.round_stroke_red_background,
+                    requireContext().theme
+                )
+            }
+
         }
         lifecycleScope.launch {
             coroutineScope {
