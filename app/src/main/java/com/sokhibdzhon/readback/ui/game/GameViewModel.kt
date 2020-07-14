@@ -9,13 +9,16 @@ import com.sokhibdzhon.readback.data.model.Word
 import timber.log.Timber
 import javax.inject.Inject
 
-private const val LEVELS = "levels"
-private const val WORDS = "words"
-private const val DONE = 0L
-private const val ONE_SECOND = 1000L
-private const val COUNTDOWN_TIME = 30000L
-
 class GameViewModel @Inject constructor(val firestoreDb: FirebaseFirestore) : ViewModel() {
+    private companion object {
+        private const val LEVELS = "levels"
+        private const val WORDS = "words"
+        private const val DONE = 0L
+        private const val ONE_SECOND = 1000L
+        private const val COUNTDOWN_TIME = 30000L
+        private const val CORRECT_POINTS = 10
+        private const val INCORRECT_POINTS = -5
+    }
 
     private var _wordList = MutableLiveData<MutableList<Word>>()
     val wordList: LiveData<MutableList<Word>>
@@ -99,14 +102,17 @@ class GameViewModel @Inject constructor(val firestoreDb: FirebaseFirestore) : Vi
     }
 
     fun checkForCorrectness(text: String) {
-        if (current.value!!.correct == text) {
-            _correct.value = true
-            _score.value = (score.value)?.plus(10)
-
+        _correct.value = if (current.value!!.correct == text) {
+            updateScore(CORRECT_POINTS)
+            true
         } else {
-            _correct.value = false
-            _score.value = (score.value)?.minus(5)
+            updateScore(INCORRECT_POINTS)
+            false
         }
+    }
+
+    private fun updateScore(value: Int) {
+        _score.value = (score.value)?.plus(value)
     }
 
     fun isCorrect() = correct.value
