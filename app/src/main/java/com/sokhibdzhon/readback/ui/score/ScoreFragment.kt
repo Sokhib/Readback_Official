@@ -84,7 +84,8 @@ class ScoreFragment : Fragment() {
     }
 
     private fun startNewGame() {
-        findNavController().navigate(R.id.gameFragment)
+        val action = ScoreFragmentDirections.actionScoreFragmentToGameFragment()
+        findNavController().navigate(action)
     }
 
 }

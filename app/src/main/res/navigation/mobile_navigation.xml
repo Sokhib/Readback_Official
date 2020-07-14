@@ -33,5 +33,9 @@
             android:name="score"
             android:defaultValue="0"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_scoreFragment_to_gameFragment"
+            app:destination="@id/gameFragment"
+            app:popUpTo="@id/startFragment" />
     </fragment>
 </navigation>
