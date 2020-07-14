@@ -77,6 +77,7 @@ class GameFragment : Fragment(), View.OnClickListener {
         //words
         viewModel.wordList.observe(viewLifecycleOwner, Observer { words ->
             if (words != null) {
+                binding.progressWordLoad.visibility = View.GONE
                 viewModel.nextWord()
                 startAnimation()
             }
