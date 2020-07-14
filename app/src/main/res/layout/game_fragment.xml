@@ -78,10 +78,10 @@
                     android:layout_margin="@dimen/size_8dp"
                     android:layout_weight="1"
                     android:background="@drawable/round_grey_background_alpha"
+                    android:paddingHorizontal="@dimen/size_8dp"
                     android:gravity="center"
-                    android:padding="@dimen/size_8dp"
-                    android:text="@{gmviewmodel.score.toString()}"
                     android:textAppearance="@style/TextAppearance.AppTheme.Display.White"
+                    app:spanText="@{gmviewmodel.score}"
                     tools:text="20" />
             </LinearLayout>
             <!--    cover with white and animate-->
