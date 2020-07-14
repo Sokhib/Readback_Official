@@ -22,8 +22,6 @@ import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 
-// TODO: making view's disabled if words are not loaded yet.
-// TODO: Too many clicks on options fix
 class GameFragment : Fragment(), View.OnClickListener {
 
     private lateinit var viewModel: GameViewModel
@@ -104,6 +102,7 @@ class GameFragment : Fragment(), View.OnClickListener {
 
     override fun onClick(v: View?) {
         viewModel.checkForCorrectness((v as TextView).text.toString())
+        isActiveOptions(false)
         v.background = if (viewModel.isCorrect() != null && viewModel.isCorrect()!!) {
             resources.getDrawable(R.drawable.round_stroke_green_background, requireContext().theme)
         } else {
@@ -116,8 +115,28 @@ class GameFragment : Fragment(), View.OnClickListener {
                     resources.getDrawable(R.drawable.round_white_background, requireContext().theme)
                 viewModel.nextWord()
                 startAnimation()
+                isActiveOptions(true)
             }
         }
+    }
+
+    private fun isActiveOptions(isActive: Boolean) {
+        if (isActive) {
+            binding.apply {
+                textOption1.setOnClickListener(this@GameFragment)
+                textOption2.setOnClickListener(this@GameFragment)
+                textOption3.setOnClickListener(this@GameFragment)
+                textOption4.setOnClickListener(this@GameFragment)
+            }
+        } else {
+            binding.apply {
+                textOption1.setOnClickListener(null)
+                textOption2.setOnClickListener(null)
+                textOption3.setOnClickListener(null)
+                textOption4.setOnClickListener(null)
+            }
+        }
+
     }
 
     private fun startAnimation() {
