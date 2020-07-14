@@ -1,11 +1,10 @@
 package com.sokhibdzhon.readback.di
 
 import android.content.Context
-import com.sokhibdzhon.readback.di.viewmodel.ViewModelModule
-import com.sokhibdzhon.readback.ui.game.GameFragment
-import com.sokhibdzhon.readback.ui.score.ScoreFragment
-import dagger.BindsInstance
-import dagger.Component
+import android.content.Context.MODE_PRIVATE
+import android.content.SharedPreferences
+import dagger.Module
+import dagger.Provides
 import javax.inject.Singleton
 
 
@@ -17,15 +16,14 @@ import javax.inject.Singleton
 ╚═══════════════════════════════════════╝
  */
 
-@Singleton
-@Component(modules = [ViewModelModule::class, FirebaseModule::class, AppModule::class])
-interface AppComponent {
-    @Component.Factory
-    interface Factory {
-        fun create(@BindsInstance context: Context): AppComponent
+@Module
+class AppModule {
+    @Provides
+    @Singleton
+    fun provideSharePref(context: Context): SharedPreferences {
+        return context.getSharedPreferences(
+            "com.sokhibdzhon.readback.sharedpreferences",
+            MODE_PRIVATE
+        )
     }
-
-    fun inject(gameFragment: GameFragment)
-    fun inject(scoreFragment: ScoreFragment)
-
 }

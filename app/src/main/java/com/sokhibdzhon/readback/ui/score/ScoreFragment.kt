@@ -1,5 +1,7 @@
 package com.sokhibdzhon.readback.ui.score
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.graphics.Typeface.BOLD
 import android.os.Bundle
 import android.text.Spannable
@@ -16,8 +18,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.sokhibdzhon.readback.BaseApplication
 import com.sokhibdzhon.readback.R
 import com.sokhibdzhon.readback.databinding.ScoreFragmentBinding
+import javax.inject.Inject
 
 class ScoreFragment : Fragment() {
 
@@ -26,8 +30,16 @@ class ScoreFragment : Fragment() {
     private lateinit var binding: ScoreFragmentBinding
     val args: ScoreFragmentArgs by navArgs()
 
-    //TODO: score should go to viewModel and come from there + max score should be save in Room DB to show in start screen
+    @Inject
+    lateinit var sharedPrefEditor: SharedPreferences
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        (requireActivity().applicationContext as BaseApplication).appGraph.inject(this)
+    }
+
     private var score = 0
+    private var bestScore = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,18 +50,22 @@ class ScoreFragment : Fragment() {
         binding.textviewStartGameScore.setOnClickListener {
             startNewGame()
         }
+        bestScore = sharedPrefEditor.getInt(getString(R.string.score), 0)
+        sharedPrefEditor.edit().putInt(getString(R.string.score), score.coerceAtLeast(bestScore))
+            .apply()
+        bestScore = sharedPrefEditor.getInt(getString(R.string.score), 0)
         return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(ScoreViewModel::class.java)
-        setGameScoreTextSpan(score)
+        setGameScoreTextSpan(score, bestScore)
     }
 
-    private fun setGameScoreTextSpan(score: Int) {
+    private fun setGameScoreTextSpan(score: Int, bestScore: Int) {
         val scoreTextSpannable =
-            SpannableString("game over! ${System.lineSeparator()} ${System.lineSeparator()} your score:  $score")
+            SpannableString("game over! ${System.lineSeparator()} ${System.lineSeparator()} your score:\t$score ${System.lineSeparator()} your best score:\t$bestScore")
 
         //Game Over text size 0.7%
         scoreTextSpannable.setSpan(
@@ -57,8 +73,7 @@ class ScoreFragment : Fragment() {
             0, scoreTextSpannable.indexOf("!") + 1,
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
-
-        // SCORE COLOR
+        //current score color
         scoreTextSpannable.setSpan(
             ForegroundColorSpan(
                 ResourcesCompat.getColor(
@@ -67,15 +82,29 @@ class ScoreFragment : Fragment() {
                     requireContext().theme
                 )
             ),
-            scoreTextSpannable.lastIndexOf(" "),
+            scoreTextSpannable.indexOf("\t"),
+            scoreTextSpannable.lastIndexOf("\n"),
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+
+        //Best score color
+        scoreTextSpannable.setSpan(
+            ForegroundColorSpan(
+                ResourcesCompat.getColor(
+                    resources,
+                    R.color.green_500,
+                    requireContext().theme
+                )
+            ),
+            scoreTextSpannable.lastIndexOf("\t"),
             scoreTextSpannable.length,
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
 
-        //BOLD SCORE
+        //BOLD BEST SCORE
         scoreTextSpannable.setSpan(
             StyleSpan(BOLD),
-            scoreTextSpannable.lastIndexOf(" "),
+            scoreTextSpannable.lastIndexOf("\t"),
             scoreTextSpannable.length,
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
