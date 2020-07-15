@@ -51,9 +51,9 @@ class ScoreFragment : Fragment() {
             startNewGame()
         }
         bestScore = sharedPrefEditor.getInt(getString(R.string.score), 0)
-        sharedPrefEditor.edit().putInt(getString(R.string.score), score.coerceAtLeast(bestScore))
+        bestScore = bestScore.coerceAtLeast(score)
+        sharedPrefEditor.edit().putInt(getString(R.string.score), bestScore)
             .apply()
-        bestScore = sharedPrefEditor.getInt(getString(R.string.score), 0)
         return binding.root
     }
 
