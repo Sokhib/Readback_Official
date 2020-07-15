@@ -22,7 +22,7 @@ import com.sokhibdzhon.readback.BaseApplication
 import com.sokhibdzhon.readback.R
 import com.sokhibdzhon.readback.databinding.ScoreFragmentBinding
 import javax.inject.Inject
-
+//TODO: Move all the logic to ViewModel.
 class ScoreFragment : Fragment() {
 
 
