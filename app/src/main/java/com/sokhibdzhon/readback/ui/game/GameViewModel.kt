@@ -119,4 +119,9 @@ class GameViewModel @Inject constructor(val firestoreDb: FirebaseFirestore) : Vi
     fun onGameFinished() {
         _gameFinish.value = false
     }
+
+    override fun onCleared() {
+        super.onCleared()
+        timer.cancel()
+    }
 }

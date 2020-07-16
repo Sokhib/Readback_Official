@@ -12,6 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.get
 import com.sokhibdzhon.readback.BaseApplication
 import com.sokhibdzhon.readback.R
 import com.sokhibdzhon.readback.databinding.GameFragmentBinding
@@ -98,7 +99,11 @@ class GameFragment : Fragment(), View.OnClickListener {
         }
         val action =
             GameFragmentDirections.actionGameFragmentToScoreFragment(viewModel.score.value ?: 0)
-        findNavController().navigate(action)
+        with(findNavController()) {
+            if (currentDestination != graph[R.id.scoreFragment]) {
+                navigate(action)
+            }
+        }
     }
 
     override fun onClick(v: View?) {
