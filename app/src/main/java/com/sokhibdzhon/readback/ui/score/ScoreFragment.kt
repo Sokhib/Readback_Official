@@ -1,6 +1,7 @@
 package com.sokhibdzhon.readback.ui.score
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Typeface.BOLD
 import android.os.Bundle
@@ -65,6 +66,23 @@ class ScoreFragment : Fragment() {
         binding.imageviewHome.setOnClickListener {
             navigateHome()
         }
+        binding.imageviewShare.setOnClickListener {
+            shareMyScore(bestScore)
+        }
+
+    }
+
+    private fun shareMyScore(bestScore: Int) {
+        val share = Intent.createChooser(Intent().apply {
+            action = Intent.ACTION_SEND
+            type = "plain/*"
+            putExtra(
+                Intent.EXTRA_TEXT,
+                "Hey, I scored $bestScore points on Readback game. Can you beat my record?! Check out app:\n" +
+                        "https://play.google.com/store/apps/details?id=${requireContext().packageName}"
+            )
+        }, "Readback")
+        startActivity(share)
     }
 
     private fun setGameScoreTextSpan(score: Int, bestScore: Int) {

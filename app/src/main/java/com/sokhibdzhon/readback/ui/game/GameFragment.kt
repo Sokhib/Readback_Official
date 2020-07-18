@@ -65,11 +65,6 @@ class GameFragment : Fragment(), View.OnClickListener {
         binding.imageviewClose.setOnClickListener {
             findNavController().popBackStack()
         }
-        //skip
-        binding.skip.setOnClickListener {
-            viewModel.nextWord()
-            startAnimation()
-        }
 
         viewModel.timeLeft.observe(viewLifecycleOwner, Observer { timeLeft ->
             binding.circularTimeView.setProgressWithAnimation(timeLeft.toFloat(), 1000)
@@ -81,6 +76,10 @@ class GameFragment : Fragment(), View.OnClickListener {
                 binding.progressWordLoad.visibility = View.GONE
                 viewModel.nextWord()
                 startAnimation()
+                binding.skip.setOnClickListener {
+                    viewModel.nextWord()
+                    startAnimation()
+                }
             }
         })
 
