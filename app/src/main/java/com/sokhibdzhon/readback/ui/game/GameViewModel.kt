@@ -84,6 +84,10 @@ class GameViewModel @Inject constructor(val firestoreDb: FirebaseFirestore) : Vi
                             Timber.d("Word added")
                         }
                     }
+                    if (!_wordList.value.isNullOrEmpty()) {
+                        Timber.d("SHUFFLED :)")
+                        _wordList.value!!.shuffle()
+                    }
                     timer.start()
                 }
             }
@@ -94,7 +98,6 @@ class GameViewModel @Inject constructor(val firestoreDb: FirebaseFirestore) : Vi
 
     fun nextWord() {
         if (!_wordList.value.isNullOrEmpty()) {
-            _wordList.value!!.shuffle()
             _current.value = _wordList.value!!.removeAt(0)
         } else {
             _gameFinish.value = true

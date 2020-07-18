@@ -6,4 +6,6 @@
     <string name="skip">skip</string>
     <string name="score">score</string>
     <string name="start_new_game">start new game</string>
+    <string name="home_icon">home</string>
+    <string name="share_icon">share</string>
 </resources>

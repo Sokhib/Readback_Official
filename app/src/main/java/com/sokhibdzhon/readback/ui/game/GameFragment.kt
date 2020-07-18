@@ -93,6 +93,25 @@ class GameFragment : Fragment(), View.OnClickListener {
         })
     }
 
+    override fun onClick(v: View?) {
+        viewModel.checkForCorrectness((v as TextView).text.toString())
+        isActiveOptions(false)
+        viewModel.isCorrect()?.let { isCorrect ->
+            setOptionBackground(v, isCorrect)
+        }
+        lifecycleScope.launch {
+            coroutineScope {
+                delay(500)
+                v.background =
+                    resources.getDrawable(R.drawable.round_white_background, requireContext().theme)
+                viewModel.nextWord()
+                startAnimation()
+                isActiveOptions(true)
+            }
+        }
+    }
+
+    //Functions
     private fun gameFinished() {
         runBlocking {
             delay(500)
@@ -106,32 +125,17 @@ class GameFragment : Fragment(), View.OnClickListener {
         }
     }
 
-    override fun onClick(v: View?) {
-        viewModel.checkForCorrectness((v as TextView).text.toString())
-        isActiveOptions(false)
-        viewModel.isCorrect()?.let { isCorrect ->
-            v.background = if (isCorrect) {
-                resources.getDrawable(
-                    R.drawable.round_stroke_green_background,
-                    requireContext().theme
-                )
-            } else {
-                resources.getDrawable(
-                    R.drawable.round_stroke_red_background,
-                    requireContext().theme
-                )
-            }
-
-        }
-        lifecycleScope.launch {
-            coroutineScope {
-                delay(500)
-                v.background =
-                    resources.getDrawable(R.drawable.round_white_background, requireContext().theme)
-                viewModel.nextWord()
-                startAnimation()
-                isActiveOptions(true)
-            }
+    private fun setOptionBackground(v: View, isCorrect: Boolean) {
+        v.background = if (isCorrect) {
+            resources.getDrawable(
+                R.drawable.round_stroke_green_background,
+                requireContext().theme
+            )
+        } else {
+            resources.getDrawable(
+                R.drawable.round_stroke_red_background,
+                requireContext().theme
+            )
         }
     }
 

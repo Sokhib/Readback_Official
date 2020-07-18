@@ -22,6 +22,7 @@ import com.sokhibdzhon.readback.BaseApplication
 import com.sokhibdzhon.readback.R
 import com.sokhibdzhon.readback.databinding.ScoreFragmentBinding
 import javax.inject.Inject
+
 //TODO: Move all the logic to ViewModel.
 class ScoreFragment : Fragment() {
 
@@ -61,6 +62,9 @@ class ScoreFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(ScoreViewModel::class.java)
         setGameScoreTextSpan(score, bestScore)
+        binding.imageviewHome.setOnClickListener {
+            navigateHome()
+        }
     }
 
     private fun setGameScoreTextSpan(score: Int, bestScore: Int) {
@@ -114,6 +118,11 @@ class ScoreFragment : Fragment() {
 
     private fun startNewGame() {
         val action = ScoreFragmentDirections.actionScoreFragmentToGameFragment()
+        findNavController().navigate(action)
+    }
+
+    private fun navigateHome() {
+        val action = ScoreFragmentDirections.actionScoreFragmentToStartFragment()
         findNavController().navigate(action)
     }
 
