@@ -62,12 +62,10 @@ class GameViewModel @Inject constructor(val firestoreDb: FirebaseFirestore) : Vi
 
         }
         getWords()
-
     }
 
     private fun getWords() {
-        val levelFromDb = 1
-        firestoreDb.collection(LEVELS).document(levelFromDb.toString()).collection(WORDS)
+        firestoreDb.collection(LEVELS).document("custom").collection(WORDS)
             .get()
             .addOnSuccessListener { document ->
                 document?.let { doc ->
