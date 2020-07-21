@@ -19,6 +19,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.android.gms.ads.AdRequest
 import com.sokhibdzhon.readback.BaseApplication
 import com.sokhibdzhon.readback.R
 import com.sokhibdzhon.readback.databinding.ScoreFragmentBinding
@@ -34,6 +35,9 @@ class ScoreFragment : Fragment() {
 
     @Inject
     lateinit var sharedPrefEditor: SharedPreferences
+
+    @Inject
+    lateinit var adRequest: AdRequest
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -56,6 +60,8 @@ class ScoreFragment : Fragment() {
         bestScore = bestScore.coerceAtLeast(score)
         sharedPrefEditor.edit().putInt(getString(R.string.score), bestScore)
             .apply()
+        //ad
+        binding.adViewScore.loadAd(adRequest)
         return binding.root
     }
 

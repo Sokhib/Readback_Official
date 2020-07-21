@@ -3,6 +3,7 @@ package com.sokhibdzhon.readback.di
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
+import com.google.android.gms.ads.AdRequest
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -26,4 +27,8 @@ class AppModule {
             MODE_PRIVATE
         )
     }
+
+    @Singleton
+    @Provides
+    fun provideAdRequest(): AdRequest = AdRequest.Builder().build()
 }

@@ -88,4 +88,7 @@ dependencies {
     androidTestImplementation "androidx.test.ext:junit:$ext_junit_version"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_espresso_core_version"
 
+    //ad
+    implementation "com.google.android.gms:play-services-ads:$play_services_ads_version"
+
 }
