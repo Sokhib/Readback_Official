@@ -17,7 +17,7 @@ import javax.inject.Inject
 class StartFragment : Fragment() {
 
     private lateinit var binding: StartFragmentBinding
-    private lateinit var viewModel: StartViewModel
+    //private lateinit var viewModel: StartViewModel
 
     @Inject
     lateinit var adRequest: AdRequest

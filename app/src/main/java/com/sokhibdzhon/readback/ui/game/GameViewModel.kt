@@ -20,6 +20,7 @@ class GameViewModel @Inject constructor(val firestoreDb: FirebaseFirestore) : Vi
         private const val INCORRECT_POINTS = -5
     }
 
+    private var words: MutableList<Word>? = null
     private var _wordList = MutableLiveData<MutableList<Word>>()
     val wordList: LiveData<MutableList<Word>>
         get() = _wordList
@@ -75,16 +76,17 @@ class GameViewModel @Inject constructor(val firestoreDb: FirebaseFirestore) : Vi
                         val correct = currentWord.get("correct") as String
                         val word = currentWord.get("word") as String
                         Timber.d("correct: $correct --> options: $options --> word: $word")
-                        _wordList.value?.let {
-                            _wordList.value!!.add(Word(correct, options, word))
+                        words?.let {
+                            words!!.add(Word(correct, options, word))
                         } ?: run {
-                            _wordList.value = mutableListOf(Word(correct, options, word))
+                            words = mutableListOf(Word(correct, options, word))
                             Timber.d("Word added")
                         }
                     }
-                    if (!_wordList.value.isNullOrEmpty()) {
+                    if (!words.isNullOrEmpty()) {
                         Timber.d("SHUFFLED :)")
-                        _wordList.value!!.shuffle()
+                        words!!.shuffle()
+                        _wordList.value = words
                     }
                     timer.start()
                 }
