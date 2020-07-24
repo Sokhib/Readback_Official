@@ -13,20 +13,19 @@
         android:gravity="center"
         android:orientation="vertical">
 
-        <TextView
-            style="@style/TextAppearance.AppTheme.Display.Black"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <ImageView
+            android:layout_width="168dp"
+            android:layout_height="168dp"
             android:gravity="center"
-            android:text="@string/app_name"
-            android:textSize="46sp"
+            android:contentDescription="@string/image_logo"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            android:src="@drawable/read_512"
             app:layout_constraintVertical_bias="0.35">
 
-        </TextView>
+        </ImageView>
 
         <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
             android:id="@+id/adViewStart"

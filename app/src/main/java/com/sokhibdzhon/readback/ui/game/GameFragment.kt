@@ -36,7 +36,7 @@ class GameFragment : Fragment(), View.OnClickListener {
         (requireActivity().applicationContext as BaseApplication).appGraph.inject(this)
     }
 
-    var options = listOf<TextView>()
+    private var options = listOf<TextView>()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -154,22 +154,9 @@ class GameFragment : Fragment(), View.OnClickListener {
     }
 
     private fun isActiveOptions(isActive: Boolean) {
-        if (isActive) {
-            binding.apply {
-                textOption1.setOnClickListener(this@GameFragment)
-                textOption2.setOnClickListener(this@GameFragment)
-                textOption3.setOnClickListener(this@GameFragment)
-                textOption4.setOnClickListener(this@GameFragment)
-            }
-        } else {
-            binding.apply {
-                textOption1.setOnClickListener(null)
-                textOption2.setOnClickListener(null)
-                textOption3.setOnClickListener(null)
-                textOption4.setOnClickListener(null)
-            }
+        options.forEach { option ->
+            option.setOnClickListener(if (isActive) this else null)
         }
-
     }
 
     private fun startAnimation() {
