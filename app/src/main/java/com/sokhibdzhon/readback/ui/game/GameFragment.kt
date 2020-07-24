@@ -36,7 +36,7 @@ class GameFragment : Fragment(), View.OnClickListener {
         (requireActivity().applicationContext as BaseApplication).appGraph.inject(this)
     }
 
-
+    var options = listOf<TextView>()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -47,16 +47,19 @@ class GameFragment : Fragment(), View.OnClickListener {
             lifecycleOwner = viewLifecycleOwner
         }
         binding.gmviewmodel = viewModel
+        options = listOf(
+            binding.textOption1,
+            binding.textOption2,
+            binding.textOption3,
+            binding.textOption4
+        )
         return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        binding.apply {
-            textOption1.setOnClickListener(this@GameFragment)
-            textOption2.setOnClickListener(this@GameFragment)
-            textOption3.setOnClickListener(this@GameFragment)
-            textOption4.setOnClickListener(this@GameFragment)
+        options.forEach { option ->
+            option.setOnClickListener(this)
         }
         //set progressMax from viewModel or db
         binding.circularTimeView.apply {
@@ -101,8 +104,13 @@ class GameFragment : Fragment(), View.OnClickListener {
         lifecycleScope.launch {
             coroutineScope {
                 delay(500)
-                v.background =
-                    resources.getDrawable(R.drawable.round_white_background, requireContext().theme)
+                options.forEach { option ->
+                    option.background = resources.getDrawable(
+                        R.drawable.round_white_background,
+                        requireContext().theme
+                    )
+                }
+
                 viewModel.nextWord()
                 startAnimation()
                 isActiveOptions(true)
@@ -131,6 +139,13 @@ class GameFragment : Fragment(), View.OnClickListener {
                 requireContext().theme
             )
         } else {
+            options.forEach { option ->
+                if (option.text.toString() == viewModel.current.value!!.correct)
+                    option.background = resources.getDrawable(
+                        R.drawable.round_stroke_green_background,
+                        requireContext().theme
+                    )
+            }
             resources.getDrawable(
                 R.drawable.round_stroke_red_background,
                 requireContext().theme
