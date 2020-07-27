@@ -4,6 +4,7 @@ import android.content.Context
 import com.sokhibdzhon.readback.di.viewmodel.ViewModelModule
 import com.sokhibdzhon.readback.ui.game.GameFragment
 import com.sokhibdzhon.readback.ui.score.ScoreFragment
+import com.sokhibdzhon.readback.ui.settings.SettingsFragment
 import com.sokhibdzhon.readback.ui.start.StartFragment
 import dagger.BindsInstance
 import dagger.Component
@@ -29,5 +30,6 @@ interface AppComponent {
     fun inject(gameFragment: GameFragment)
     fun inject(scoreFragment: ScoreFragment)
     fun inject(startFragment: StartFragment)
+    fun inject(settingsFragment: SettingsFragment)
 
 }

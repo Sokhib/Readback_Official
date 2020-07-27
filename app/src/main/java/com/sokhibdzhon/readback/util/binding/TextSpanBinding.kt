@@ -26,3 +26,8 @@ fun spanText(textView: TextView, score: Int = 0) {
     )
     textView.text = scoreSpan
 }
+
+@BindingAdapter("skipText")
+fun skipText(textView: TextView, skip: Int = 0) {
+    textView.text = "skip $skip"
+}

@@ -17,12 +17,13 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.gms.ads.AdRequest
 import com.sokhibdzhon.readback.BaseApplication
 import com.sokhibdzhon.readback.R
 import com.sokhibdzhon.readback.databinding.ScoreFragmentBinding
+import com.sokhibdzhon.readback.util.enum.NavigationType
+import com.sokhibdzhon.readback.util.enum.navigate
 import javax.inject.Inject
 
 //TODO: Move all the logic to ViewModel.
@@ -54,7 +55,7 @@ class ScoreFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.score_fragment, container, false)
         score = args.score
         binding.textviewStartGameScore.setOnClickListener {
-            startNewGame()
+            navigate(NavigationType.SCOREGAME)
         }
         bestScore = sharedPrefEditor.getInt(getString(R.string.score), 0)
         bestScore = bestScore.coerceAtLeast(score)
@@ -70,7 +71,7 @@ class ScoreFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(ScoreViewModel::class.java)
         setGameScoreTextSpan(score, bestScore)
         binding.imageviewHome.setOnClickListener {
-            navigateHome()
+            navigate(NavigationType.SCOREHOME)
         }
         binding.imageviewShare.setOnClickListener {
             shareMyScore(bestScore)
@@ -138,16 +139,6 @@ class ScoreFragment : Fragment() {
         )
         binding.textViewScore.text = scoreTextSpannable
 
-    }
-
-    private fun startNewGame() {
-        val action = ScoreFragmentDirections.actionScoreFragmentToGameFragment()
-        findNavController().navigate(action)
-    }
-
-    private fun navigateHome() {
-        val action = ScoreFragmentDirections.actionScoreFragmentToStartFragment()
-        findNavController().navigate(action)
     }
 
 }

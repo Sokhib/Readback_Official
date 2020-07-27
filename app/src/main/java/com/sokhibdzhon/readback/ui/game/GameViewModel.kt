@@ -1,21 +1,28 @@
 package com.sokhibdzhon.readback.ui.game
 
+import android.content.SharedPreferences
 import android.os.CountDownTimer
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.FirebaseFirestore
 import com.sokhibdzhon.readback.data.model.Word
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
-class GameViewModel @Inject constructor(val firestoreDb: FirebaseFirestore) : ViewModel() {
+//App doing too much shit on MainThread get data from shared from back thread.
+//Get sharedPref in back then set to timer then get words then start.
+class GameViewModel @Inject constructor(
+    val firestoreDb: FirebaseFirestore,
+    sharedPref: SharedPreferences
+) : ViewModel() {
     private companion object {
         private const val LEVELS = "levels"
         private const val WORDS = "words"
         private const val DONE = 0L
         private const val ONE_SECOND = 1000L
-        private const val COUNTDOWN_TIME = 30000L
         private const val CORRECT_POINTS = 10
         private const val INCORRECT_POINTS = -5
     }
@@ -45,16 +52,40 @@ class GameViewModel @Inject constructor(val firestoreDb: FirebaseFirestore) : Vi
     val score: LiveData<Int>
         get() = _score
 
-    private val timer: CountDownTimer
+    private lateinit var timer: CountDownTimer
     private val _timeLeft = MutableLiveData<Long>()
     val timeLeft: LiveData<Long>
         get() = _timeLeft
+    private val _startTimer = MutableLiveData<Boolean>()
+    val startTimer: LiveData<Boolean>
+        get() = _startTimer
+
+    private val _skipNumber = MutableLiveData(5)
+    val skipNumber: LiveData<Int>
+        get() = _skipNumber
+
 
     init {
         _correct.value = false
         _gameFinish.value = false
         _score.value = 0
-        timer = object : CountDownTimer(COUNTDOWN_TIME, ONE_SECOND) {
+        viewModelScope.launch {
+            _timeLeft.value = sharedPref.getInt("seconds", 15).toLong()
+            _skipNumber.value = sharedPref.getInt("skips", 5)
+            _startTimer.value = true
+        }
+        getWords()
+    }
+
+    fun minusSkip() {
+        _skipNumber.value = _skipNumber.value!! - 1
+    }
+
+    fun startTimer() {
+        timer = object : CountDownTimer(
+            timeLeft.value!! * 1000,
+            ONE_SECOND
+        ) {
             override fun onFinish() {
                 _gameFinish.value = true
                 _timeLeft.value = DONE
@@ -64,8 +95,7 @@ class GameViewModel @Inject constructor(val firestoreDb: FirebaseFirestore) : Vi
                 _timeLeft.value = (millisUntilFinished / ONE_SECOND)
             }
 
-        }
-        getWords()
+        }.start()
     }
 
     private fun getWords() {
@@ -94,7 +124,6 @@ class GameViewModel @Inject constructor(val firestoreDb: FirebaseFirestore) : Vi
                         _isConnected.value = false
                         _gameFinish.value = true
                     }
-                    timer.start()
                 }
             }
             .addOnFailureListener { exception ->

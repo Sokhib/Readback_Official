@@ -50,5 +50,10 @@
         android:id="@+id/settingsFragment"
         android:name="com.sokhibdzhon.readback.ui.settings.SettingsFragment"
         android:label="SettingsFragment"
-        tools:layout="@layout/fragment_settings" />
+        tools:layout="@layout/fragment_settings">
+        <action
+            android:id="@+id/action_settingsFragment_to_gameFragment"
+            app:destination="@id/gameFragment"
+            app:popUpTo="@id/startFragment" />
+    </fragment>
 </navigation>

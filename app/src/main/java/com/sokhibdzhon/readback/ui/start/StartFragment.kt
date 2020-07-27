@@ -7,13 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.navigation.NavDirections
-import androidx.navigation.fragment.findNavController
 import com.google.android.gms.ads.AdRequest
 import com.sokhibdzhon.readback.BaseApplication
 import com.sokhibdzhon.readback.R
 import com.sokhibdzhon.readback.databinding.StartFragmentBinding
 import com.sokhibdzhon.readback.util.enum.NavigationType
+import com.sokhibdzhon.readback.util.enum.navigate
 import javax.inject.Inject
 
 class StartFragment : Fragment() {
@@ -44,23 +43,12 @@ class StartFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         binding.textviewStartGame.setOnClickListener {
-            navigate(NavigationType.GAME)
+            navigate(NavigationType.STARTGAME)
         }
         binding.imageviewSettings.setOnClickListener {
-            navigate(NavigationType.SETTINGS)
+            navigate(NavigationType.STARTSETTINGS)
         }
 
     }
 
-    private fun navigate(navType: NavigationType) {
-        val direction: NavDirections = when (navType) {
-            NavigationType.GAME -> {
-                StartFragmentDirections.actionStartFragmentToGameFragment()
-            }
-            NavigationType.SETTINGS -> {
-                StartFragmentDirections.actionStartFragmentToSettingsFragment()
-            }
-        }
-        this.findNavController().navigate(direction)
-    }
 }

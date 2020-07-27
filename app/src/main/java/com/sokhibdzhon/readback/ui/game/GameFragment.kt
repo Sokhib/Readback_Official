@@ -1,6 +1,7 @@
 package com.sokhibdzhon.readback.ui.game
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -32,6 +33,11 @@ class GameFragment : Fragment(), View.OnClickListener {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
+    private var timeSeekbar: Float = 15.0f
+
+    @Inject
+    lateinit var sharedPrefEditor: SharedPreferences
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         (requireActivity().applicationContext as BaseApplication).appGraph.inject(this)
@@ -46,8 +52,8 @@ class GameFragment : Fragment(), View.OnClickListener {
         viewModel = ViewModelProvider(this, viewModelFactory).get(GameViewModel::class.java)
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
+            gmviewmodel = viewModel
         }
-        binding.gmviewmodel = viewModel
         options = listOf(
             binding.textOption1,
             binding.textOption2,
@@ -62,9 +68,11 @@ class GameFragment : Fragment(), View.OnClickListener {
         options.forEach { option ->
             option.setOnClickListener(this)
         }
+        timeSeekbar =
+            sharedPrefEditor.getInt(getString(R.string.sharedpref_seconds), 15).toFloat()
         //set progressMax from viewModel or db
         binding.circularTimeView.apply {
-            progressMax = 30f
+            progressMax = timeSeekbar
         }
         binding.imageviewClose.setOnClickListener {
             findNavController().popBackStack()
@@ -88,10 +96,27 @@ class GameFragment : Fragment(), View.OnClickListener {
                 startAnimation()
                 binding.skip.setOnClickListener {
                     viewModel.nextWord()
+                    viewModel.minusSkip()
                     startAnimation()
                 }
             }
         })
+        //skipNumber
+        viewModel.skipNumber.observe(viewLifecycleOwner, Observer { numberOfSkips ->
+
+            if (numberOfSkips == 0) {
+                Toast.makeText(requireActivity(), "No Skips Left", Toast.LENGTH_SHORT)
+                    .show()
+                binding.skip.setOnClickListener(null)
+            }
+
+
+        })
+        //start timer
+        viewModel.startTimer.observe(viewLifecycleOwner, Observer {
+            viewModel.startTimer()
+        })
+
 
         //Game finish
         viewModel.gameFinish.observe(viewLifecycleOwner, Observer { hasFinished ->

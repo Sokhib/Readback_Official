@@ -194,11 +194,11 @@
                 android:elevation="30dp"
                 android:gravity="center"
                 android:minHeight="36dp"
-                android:text="@string/skip"
                 android:textAppearance="@style/TextAppearance.AppTheme.Display.Black"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/text_option_4" />
+                app:layout_constraintTop_toBottomOf="@+id/text_option_4"
+                app:skipText="@{gmviewmodel.skipNumber}" />
 
         </androidx.constraintlayout.motion.widget.MotionLayout>
 

@@ -83,6 +83,10 @@ dependencies {
     //timer
     implementation "com.mikhaellopez:circularprogressbar:$timer_version"
 
+    //seekbar
+    implementation 'com.xw.repo:bubbleseekbar:3.20'
+
+
     //test
     testImplementation "junit:junit:$junit_junit_version"
     androidTestImplementation "androidx.test.ext:junit:$ext_junit_version"

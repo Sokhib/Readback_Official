@@ -18,6 +18,9 @@
     <color name="white">#FFFFFF</color>
     <color name="red_500">#F54545</color>
     <color name="yellow_900">#F78432</color>
+    <color name="yellow_400">#FFEE58</color>
+    <color name="yellow_800">#F9A825</color>
+    <color name="yellow_700">#FBC02D</color>
     <color name="green_500">#4CAF50</color>
     <color name="green_300">#81C784</color>
 </resources>
