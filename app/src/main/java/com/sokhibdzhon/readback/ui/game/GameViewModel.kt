@@ -33,6 +33,9 @@ class GameViewModel @Inject constructor(val firestoreDb: FirebaseFirestore) : Vi
     val gameFinish: LiveData<Boolean>
         get() = _gameFinish
 
+    private val _isConnected = MutableLiveData<Boolean>(true)
+    val isConnected: LiveData<Boolean>
+        get() = _isConnected
 
     private val _current = MutableLiveData<Word>()
     val current: LiveData<Word>
@@ -87,6 +90,9 @@ class GameViewModel @Inject constructor(val firestoreDb: FirebaseFirestore) : Vi
                         Timber.d("SHUFFLED :)")
                         words!!.shuffle()
                         _wordList.value = words
+                    } else {
+                        _isConnected.value = false
+                        _gameFinish.value = true
                     }
                     timer.start()
                 }

@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -68,11 +69,17 @@ class GameFragment : Fragment(), View.OnClickListener {
         binding.imageviewClose.setOnClickListener {
             findNavController().popBackStack()
         }
-
+        //timeleft
         viewModel.timeLeft.observe(viewLifecycleOwner, Observer { timeLeft ->
             binding.circularTimeView.setProgressWithAnimation(timeLeft.toFloat(), 1000)
         })
-
+        //checkInternet connection
+        viewModel.isConnected.observe(viewLifecycleOwner, Observer { isConnected ->
+            if (!isConnected) {
+                Toast.makeText(requireActivity(), "Check internet connection", Toast.LENGTH_SHORT)
+                    .show()
+            }
+        })
         //words
         viewModel.wordList.observe(viewLifecycleOwner, Observer { words ->
             words?.let {
