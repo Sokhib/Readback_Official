@@ -14,15 +14,30 @@
         android:orientation="vertical">
 
         <ImageView
+            android:id="@+id/imageview_home"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_margin="@dimen/size_24dp"
+            android:background="@drawable/round_white_background"
+            android:contentDescription="@string/home_icon"
+            android:elevation="@dimen/size_8dp"
+            android:minWidth="48dp"
+            android:minHeight="48dp"
+            android:padding="@dimen/size_16dp"
+            android:src="@drawable/ic_settings"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
             android:layout_width="168dp"
             android:layout_height="168dp"
-            android:gravity="center"
             android:contentDescription="@string/image_logo"
+            android:gravity="center"
+            android:src="@drawable/read_512"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:src="@drawable/read_512"
             app:layout_constraintVertical_bias="0.35">
 
         </ImageView>
