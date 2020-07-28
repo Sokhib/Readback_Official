@@ -65,9 +65,6 @@ class GameFragment : Fragment(), View.OnClickListener {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        options.forEach { option ->
-            option.setOnClickListener(this)
-        }
         timeSeekbar =
             sharedPrefEditor.getInt(getString(R.string.sharedpref_seconds), 15).toFloat()
         //set progressMax from viewModel or db
@@ -92,6 +89,9 @@ class GameFragment : Fragment(), View.OnClickListener {
         viewModel.wordList.observe(viewLifecycleOwner, Observer { words ->
             words?.let {
                 binding.progressWordLoad.visibility = View.GONE
+                options.forEach { option ->
+                    option.setOnClickListener(this)
+                }
                 viewModel.nextWord()
                 startAnimation()
                 binding.skip.setOnClickListener {
