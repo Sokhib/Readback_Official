@@ -1,0 +1,22 @@
+package com.sokhibdzhon.readback.data.repository
+
+import com.sokhibdzhon.readback.data.Resource
+import com.sokhibdzhon.readback.data.model.Word
+import com.sokhibdzhon.readback.data.network.custom.CustomGameDataSource
+import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
+
+
+/**     I ❤ Code:)
+╔═══════════════════════════════════════╗
+║  Created by Sokhibdzhon Saidmuratov   ║
+╠═══════════════════════════════════════╣
+║ sokhibsaid@gmail.com                  ║
+╚═══════════════════════════════════════╝
+ */
+
+class GameRepoImpl @Inject constructor(private val customGameDataSourceImpl: CustomGameDataSource) :
+    GameRepo {
+    override fun getCustomGameWords(): Flow<Resource<MutableList<Word>>> =
+        customGameDataSourceImpl.getWords()
+}

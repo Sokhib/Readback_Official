@@ -20,7 +20,7 @@ import javax.inject.Singleton
  */
 
 @Singleton
-@Component(modules = [ViewModelModule::class, FirebaseModule::class, AppModule::class])
+@Component(modules = [ViewModelModule::class, DataModule::class, AppModule::class])
 interface AppComponent {
     @Component.Factory
     interface Factory {
