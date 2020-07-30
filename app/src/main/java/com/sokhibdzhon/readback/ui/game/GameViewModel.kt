@@ -56,9 +56,6 @@ class GameViewModel @Inject constructor(
     private val _timeLeft = MutableLiveData<Long>()
     val timeLeft: LiveData<Long>
         get() = _timeLeft
-    private val _startTimer = MutableLiveData<Boolean>()
-    val startTimer: LiveData<Boolean>
-        get() = _startTimer
 
     private val _skipNumber = MutableLiveData(5)
     val skipNumber: LiveData<Int>
@@ -72,16 +69,12 @@ class GameViewModel @Inject constructor(
         viewModelScope.launch {
             _timeLeft.value = sharedPref.getInt("seconds", 15).toLong()
             _skipNumber.value = sharedPref.getInt("skips", 5)
-            _startTimer.value = true
         }
+        prepareTimer()
         getWords()
     }
 
-    fun minusSkip() {
-        _skipNumber.value = _skipNumber.value!! - 1
-    }
-
-    fun startTimer() {
+    private fun prepareTimer() {
         timer = object : CountDownTimer(
             timeLeft.value!! * 1000,
             ONE_SECOND
@@ -95,7 +88,11 @@ class GameViewModel @Inject constructor(
                 _timeLeft.value = (millisUntilFinished / ONE_SECOND)
             }
 
-        }.start()
+        }
+    }
+
+    fun minusSkip() {
+        _skipNumber.value = _skipNumber.value!! - 1
     }
 
     private fun getWords() {
@@ -104,11 +101,13 @@ class GameViewModel @Inject constructor(
             .addOnSuccessListener { document ->
                 document?.let { doc ->
                     for (currentWord in doc.documents) {
-                        val options = currentWord.get("options") as MutableList<String>
+                        // In case someone inserts wrong data in Firebase Firestore not to get crash.
+                        val options =
+                            currentWord.get("options") as MutableList<String>
                         options.shuffle()
                         val correct = currentWord.get("correct") as String
                         val word = currentWord.get("word") as String
-                        Timber.d("correct: $correct --> options: $options --> word: $word")
+//                        Timber.d("correct: $correct --> options: $options --> word: $word")
                         words?.let {
                             words!!.add(Word(correct, options, word))
                         } ?: run {
@@ -117,9 +116,10 @@ class GameViewModel @Inject constructor(
                         }
                     }
                     if (!words.isNullOrEmpty()) {
-                        Timber.d("SHUFFLED :)")
+//                        Timber.d("SHUFFLED :)")
                         words!!.shuffle()
                         _wordList.value = words
+                        timer.start()
                     } else {
                         _isConnected.value = false
                         _gameFinish.value = true
@@ -154,6 +154,7 @@ class GameViewModel @Inject constructor(
     }
 
     fun isCorrect() = correct.value
+
     fun onGameFinished() {
         _gameFinish.value = false
     }

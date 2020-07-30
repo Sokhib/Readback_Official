@@ -112,11 +112,6 @@ class GameFragment : Fragment(), View.OnClickListener {
 
 
         })
-        //start timer
-        viewModel.startTimer.observe(viewLifecycleOwner, Observer {
-            viewModel.startTimer()
-        })
-
 
         //Game finish
         viewModel.gameFinish.observe(viewLifecycleOwner, Observer { hasFinished ->
