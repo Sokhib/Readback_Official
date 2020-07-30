@@ -101,12 +101,19 @@ class GameViewModel @Inject constructor(
             .addOnSuccessListener { document ->
                 document?.let { doc ->
                     for (currentWord in doc.documents) {
-                        // In case someone inserts wrong data in Firebase Firestore not to get crash.
+                        // In case there are wrong inserts data in Firebase Firestore not to get crash.
                         val options =
-                            currentWord.get("options") as MutableList<String>
+                            (currentWord.get("options") as MutableList<String>?)?.let {
+                                currentWord.get("options") as MutableList<String>
+                            } ?: mutableListOf("", "", "", "")
                         options.shuffle()
-                        val correct = currentWord.get("correct") as String
-                        val word = currentWord.get("word") as String
+                        val correct =
+                            (currentWord.get("correct") as String?)?.let { currentWord.get("correct") as String }
+                                ?: ""
+                        val word =
+                            (currentWord.get("word") as String?)?.let { currentWord.get("word") as String }
+                                ?: ""
+
 //                        Timber.d("correct: $correct --> options: $options --> word: $word")
                         words?.let {
                             words!!.add(Word(correct, options, word))

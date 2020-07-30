@@ -13,7 +13,10 @@ data class Word(
     val correct: String = "",
     val options: MutableList<String>,
     val word: String = ""
-)
+) {
+    @Suppress("unused")
+    constructor() : this("", mutableListOf("", "", "", ""), "")
+}
 
 
 
