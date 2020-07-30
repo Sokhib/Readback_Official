@@ -17,11 +17,13 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.get
 import com.sokhibdzhon.readback.BaseApplication
 import com.sokhibdzhon.readback.R
+import com.sokhibdzhon.readback.data.Status
 import com.sokhibdzhon.readback.databinding.GameFragmentBinding
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import timber.log.Timber
 import javax.inject.Inject
 
 
@@ -87,17 +89,22 @@ class GameFragment : Fragment(), View.OnClickListener {
         })
         //words
         viewModel.wordList.observe(viewLifecycleOwner, Observer { words ->
-            words?.let {
-                binding.progressWordLoad.visibility = View.GONE
-                options.forEach { option ->
-                    option.setOnClickListener(this)
-                }
-                viewModel.nextWord()
-                startAnimation()
-                binding.skip.setOnClickListener {
+            when (words.status) {
+                Status.SUCCESS -> {
+                    binding.progressWordLoad.visibility = View.GONE
+                    options.forEach { option ->
+                        option.setOnClickListener(this)
+                    }
+                    binding.skip.setOnClickListener {
+                        viewModel.nextWord()
+                        viewModel.minusSkip()
+                        startAnimation()
+                    }
                     viewModel.nextWord()
-                    viewModel.minusSkip()
                     startAnimation()
+                    Timber.d("SUCCESS...")
+                    Timber.d("${words.data?.get(0)?.correct}")
+
                 }
             }
         })

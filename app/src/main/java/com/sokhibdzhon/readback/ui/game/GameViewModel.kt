@@ -6,8 +6,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.firestore.FirebaseFirestore
+import com.sokhibdzhon.readback.data.Resource
+import com.sokhibdzhon.readback.data.Status
 import com.sokhibdzhon.readback.data.model.Word
+import com.sokhibdzhon.readback.data.repository.GameRepoImpl
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -15,21 +19,18 @@ import javax.inject.Inject
 //App doing too much shit on MainThread get data from shared from back thread.
 //Get sharedPref in back then set to timer then get words then start.
 class GameViewModel @Inject constructor(
-    val firestoreDb: FirebaseFirestore,
+    val gameRepoImpl: GameRepoImpl,
     sharedPref: SharedPreferences
 ) : ViewModel() {
     private companion object {
-        private const val LEVELS = "levels"
-        private const val WORDS = "words"
         private const val DONE = 0L
         private const val ONE_SECOND = 1000L
         private const val CORRECT_POINTS = 10
         private const val INCORRECT_POINTS = -5
     }
 
-    private var words: MutableList<Word>? = null
-    private var _wordList = MutableLiveData<MutableList<Word>>()
-    val wordList: LiveData<MutableList<Word>>
+    private var _wordList = MutableLiveData<Resource<MutableList<Word>>>()
+    val wordList: LiveData<Resource<MutableList<Word>>>
         get() = _wordList
 
     private val _correct = MutableLiveData<Boolean>()
@@ -74,6 +75,19 @@ class GameViewModel @Inject constructor(
         getWords()
     }
 
+    private fun getWords() {
+        gameRepoImpl.getCustomGameWords()
+            .onEach {
+                when (it.status) {
+                    Status.SUCCESS -> {
+                        _wordList.value = it
+                        Timber.d("${_wordList.value?.data?.size}")
+                        timer.start()
+                    }
+                }
+            }.launchIn(viewModelScope)
+    }
+
     private fun prepareTimer() {
         timer = object : CountDownTimer(
             timeLeft.value!! * 1000,
@@ -95,55 +109,12 @@ class GameViewModel @Inject constructor(
         _skipNumber.value = _skipNumber.value!! - 1
     }
 
-    private fun getWords() {
-        firestoreDb.collection(LEVELS).document("custom").collection(WORDS)
-            .get()
-            .addOnSuccessListener { document ->
-                document?.let { doc ->
-                    for (currentWord in doc.documents) {
-                        // In case there are wrong inserts data in Firebase Firestore not to get crash.
-                        val options =
-                            (currentWord.get("options") as MutableList<String>?)?.let {
-                                currentWord.get("options") as MutableList<String>
-                            } ?: mutableListOf("", "", "", "")
-                        options.shuffle()
-                        val correct =
-                            (currentWord.get("correct") as String?)?.let { currentWord.get("correct") as String }
-                                ?: ""
-                        val word =
-                            (currentWord.get("word") as String?)?.let { currentWord.get("word") as String }
-                                ?: ""
-
-//                        Timber.d("correct: $correct --> options: $options --> word: $word")
-                        words?.let {
-                            words!!.add(Word(correct, options, word))
-                        } ?: run {
-                            words = mutableListOf(Word(correct, options, word))
-                            Timber.d("Word added")
-                        }
-                    }
-                    if (!words.isNullOrEmpty()) {
-//                        Timber.d("SHUFFLED :)")
-                        words!!.shuffle()
-                        _wordList.value = words
-                        timer.start()
-                    } else {
-                        _isConnected.value = false
-                        _gameFinish.value = true
-                    }
-                }
-            }
-            .addOnFailureListener { exception ->
-                Timber.d("Error getting documents: $exception")
-            }
-    }
-
     fun nextWord() {
-        if (!_wordList.value.isNullOrEmpty()) {
-            _current.value = _wordList.value!!.removeAt(0)
-        } else {
-            _gameFinish.value = true
-        }
+//        if (!_wordList.value.isNullOrEmpty()) {
+//            _current.value = _wordList.value!!.removeAt(0)
+//        } else {
+//            _gameFinish.value = true
+//        }
     }
 
     fun checkForCorrectness(text: String) {
