@@ -6,7 +6,6 @@ import com.sokhibdzhon.readback.data.model.Word
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
-import timber.log.Timber
 import javax.inject.Inject
 
 
@@ -28,7 +27,6 @@ class CustomGameDataSourceImpl @Inject constructor(private val firestore: Fireba
 
     override fun getWords(): Flow<Resource<MutableList<Word>>> = callbackFlow {
         var words: MutableList<Word>? = null
-        Timber.d("LOADING...")
         offer(Resource.loading())
         val eventDocument = firestore.collection(LEVELS).document(CUSTOM).collection(WORDS)
         val subscription =

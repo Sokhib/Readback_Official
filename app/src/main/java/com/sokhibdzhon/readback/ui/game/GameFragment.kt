@@ -35,8 +35,6 @@ class GameFragment : Fragment(), View.OnClickListener {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    private var timeSeekbar: Float = 15.0f
-
     @Inject
     lateinit var sharedPrefEditor: SharedPreferences
 
@@ -67,31 +65,20 @@ class GameFragment : Fragment(), View.OnClickListener {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        timeSeekbar =
-            sharedPrefEditor.getInt(getString(R.string.sharedpref_seconds), 15).toFloat()
-        //set progressMax from viewModel or db
-        binding.circularTimeView.apply {
-            progressMax = timeSeekbar
-        }
+        binding.circularTimeView.apply { progressMax = Float.MAX_VALUE }
         binding.imageviewClose.setOnClickListener {
             findNavController().popBackStack()
         }
         //timeleft
         viewModel.timeLeft.observe(viewLifecycleOwner, Observer { timeLeft ->
+            if (binding.circularTimeView.progressMax == Float.MAX_VALUE)
+                binding.circularTimeView.progressMax = timeLeft.toFloat()
             binding.circularTimeView.setProgressWithAnimation(timeLeft.toFloat(), 1000)
-        })
-        //checkInternet connection
-        viewModel.isConnected.observe(viewLifecycleOwner, Observer { isConnected ->
-            if (!isConnected) {
-                Toast.makeText(requireActivity(), "Check internet connection", Toast.LENGTH_SHORT)
-                    .show()
-            }
         })
         //words
         viewModel.wordList.observe(viewLifecycleOwner, Observer { words ->
             when (words.status) {
                 Status.SUCCESS -> {
-                    binding.progressWordLoad.visibility = View.GONE
                     options.forEach { option ->
                         option.setOnClickListener(this)
                     }
@@ -103,8 +90,16 @@ class GameFragment : Fragment(), View.OnClickListener {
                     viewModel.nextWord()
                     startAnimation()
                     Timber.d("SUCCESS...")
-                    Timber.d("${words.data?.get(0)?.correct}")
-
+                }
+                Status.ERROR -> {
+                    Toast.makeText(
+                        requireActivity(),
+                        "No Words or Check Internet Connection",
+                        Toast.LENGTH_SHORT
+                    )
+                        .show()
+                }
+                Status.LOADING -> {
                 }
             }
         })

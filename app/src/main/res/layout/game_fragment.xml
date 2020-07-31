@@ -208,6 +208,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:indeterminateTint="@color/green_500"
-            android:progressTint="@color/green_500" />
+            android:progressTint="@color/green_500"
+            app:progressBarVisibility="@{gmviewmodel.wordList.status}" />
     </FrameLayout>
 </layout>

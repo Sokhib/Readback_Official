@@ -41,10 +41,6 @@ class GameViewModel @Inject constructor(
     val gameFinish: LiveData<Boolean>
         get() = _gameFinish
 
-    private val _isConnected = MutableLiveData<Boolean>(true)
-    val isConnected: LiveData<Boolean>
-        get() = _isConnected
-
     private val _current = MutableLiveData<Word>()
     val current: LiveData<Word>
         get() = _current
@@ -78,12 +74,11 @@ class GameViewModel @Inject constructor(
     private fun getWords() {
         gameRepoImpl.getCustomGameWords()
             .onEach {
-                when (it.status) {
-                    Status.SUCCESS -> {
-                        _wordList.value = it
-                        Timber.d("${_wordList.value?.data?.size}")
-                        timer.start()
-                    }
+                Timber.d("${it.status}")
+                if (it.status == Status.SUCCESS) {
+                    _wordList.value = it
+                    Timber.d("${_wordList.value?.data?.size}")
+                    timer.start()
                 }
             }.launchIn(viewModelScope)
     }
@@ -110,11 +105,11 @@ class GameViewModel @Inject constructor(
     }
 
     fun nextWord() {
-//        if (!_wordList.value.isNullOrEmpty()) {
-//            _current.value = _wordList.value!!.removeAt(0)
-//        } else {
-//            _gameFinish.value = true
-//        }
+        if (!_wordList.value?.data.isNullOrEmpty()) {
+            _current.value = _wordList.value!!.data!!.removeAt(0)
+        } else {
+            _gameFinish.value = true
+        }
     }
 
     fun checkForCorrectness(text: String) {
