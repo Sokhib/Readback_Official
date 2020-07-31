@@ -27,6 +27,9 @@ class GameViewModel @Inject constructor(
         private const val ONE_SECOND = 1000L
         private const val CORRECT_POINTS = 10
         private const val INCORRECT_POINTS = -5
+        private const val SECONDS = "seconds"
+        private const val SKIPS = "skips"
+
     }
 
     private var _wordList = MutableLiveData<Resource<MutableList<Word>>>()
@@ -34,7 +37,7 @@ class GameViewModel @Inject constructor(
         get() = _wordList
 
     private val _correct = MutableLiveData<Boolean>()
-    val correct: LiveData<Boolean>
+    private val correct: LiveData<Boolean>
         get() = _correct
 
     private val _gameFinish = MutableLiveData<Boolean>()
@@ -64,8 +67,8 @@ class GameViewModel @Inject constructor(
         _gameFinish.value = false
         _score.value = 0
         viewModelScope.launch {
-            _timeLeft.value = sharedPref.getInt("seconds", 15).toLong()
-            _skipNumber.value = sharedPref.getInt("skips", 5)
+            _timeLeft.value = sharedPref.getInt(SECONDS, 15).toLong()
+            _skipNumber.value = sharedPref.getInt(SKIPS, 5)
         }
         prepareTimer()
         getWords()

@@ -3,6 +3,7 @@ package com.sokhibdzhon.readback.di.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.sokhibdzhon.readback.ui.game.GameViewModel
+import com.sokhibdzhon.readback.ui.score.ScoreViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
@@ -26,4 +27,8 @@ abstract class ViewModelModule {
     @ViewModelMapKey(GameViewModel::class)
     internal abstract fun bindGameViewModel(viewModel: GameViewModel): ViewModel
 
+    @Binds
+    @IntoMap
+    @ViewModelMapKey(ScoreViewModel::class)
+    internal abstract fun bindScoreViewModel(viewModel: ScoreViewModel): ViewModel
 }

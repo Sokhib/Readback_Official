@@ -17,6 +17,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import com.google.android.gms.ads.AdRequest
 import com.sokhibdzhon.readback.BaseApplication
@@ -32,6 +33,10 @@ class ScoreFragment : Fragment() {
 
     private lateinit var viewModel: ScoreViewModel
     private lateinit var binding: ScoreFragmentBinding
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+
     val args: ScoreFragmentArgs by navArgs()
 
     @Inject
@@ -45,36 +50,33 @@ class ScoreFragment : Fragment() {
         (requireActivity().applicationContext as BaseApplication).appGraph.inject(this)
     }
 
-    private var score = 0
-    private var bestScore = 0
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.score_fragment, container, false)
-        score = args.score
-        binding.textviewStartGameScore.setOnClickListener {
-            navigate(NavigationType.SCOREGAME)
-        }
-        bestScore = sharedPrefEditor.getInt(getString(R.string.score), 0)
-        bestScore = bestScore.coerceAtLeast(score)
-        sharedPrefEditor.edit().putInt(getString(R.string.score), bestScore)
-            .apply()
+        viewModel = ViewModelProvider(this, viewModelFactory).get(ScoreViewModel::class.java)
         //ad
         binding.adViewScore.loadAd(adRequest)
+        lifecycleScope.launchWhenCreated {
+            viewModel.setScore(args.score)
+        }
         return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(ScoreViewModel::class.java)
-        setGameScoreTextSpan(score, bestScore)
+        setGameScoreTextSpan(viewModel.score.value ?: 0, viewModel.bestScore.value ?: 0)
         binding.imageviewHome.setOnClickListener {
             navigate(NavigationType.SCOREHOME)
         }
+
         binding.imageviewShare.setOnClickListener {
-            shareMyScore(bestScore)
+            shareMyScore(viewModel.bestScore.value ?: 0)
+        }
+
+        binding.textviewStartGameScore.setOnClickListener {
+            navigate(NavigationType.SCOREGAME)
         }
 
     }
