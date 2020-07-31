@@ -26,13 +26,6 @@ class CustomGameDataSourceImpl @Inject constructor(private val firestore: Fireba
         private const val WORDS = "words"
     }
 
-    /*
-    * Add words to wordList
-    * startTimer
-    *  if NO words checkInternet is false && game finish = true
-    *
-    * */
-
     override fun getWords(): Flow<Resource<MutableList<Word>>> = callbackFlow {
         var words: MutableList<Word>? = null
         Timber.d("LOADING...")
