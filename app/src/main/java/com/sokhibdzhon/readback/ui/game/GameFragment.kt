@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.get
+import com.google.android.material.snackbar.Snackbar
 import com.sokhibdzhon.readback.BaseApplication
 import com.sokhibdzhon.readback.R
 import com.sokhibdzhon.readback.data.Status
@@ -107,7 +108,7 @@ class GameFragment : Fragment(), View.OnClickListener {
         viewModel.skipNumber.observe(viewLifecycleOwner, Observer { numberOfSkips ->
 
             if (numberOfSkips == 0) {
-                Toast.makeText(requireActivity(), "No Skips Left", Toast.LENGTH_SHORT)
+                Snackbar.make(binding.root, "No Skips Left", Snackbar.LENGTH_SHORT)
                     .show()
                 binding.skip.setOnClickListener(null)
             }
