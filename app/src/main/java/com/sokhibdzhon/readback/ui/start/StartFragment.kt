@@ -11,6 +11,7 @@ import com.google.android.gms.ads.AdRequest
 import com.sokhibdzhon.readback.BaseApplication
 import com.sokhibdzhon.readback.R
 import com.sokhibdzhon.readback.databinding.StartFragmentBinding
+import com.sokhibdzhon.readback.util.enum.GameType
 import com.sokhibdzhon.readback.util.enum.NavigationType
 import com.sokhibdzhon.readback.util.enum.navigate
 import javax.inject.Inject
@@ -39,11 +40,16 @@ class StartFragment : Fragment() {
         return binding.root
     }
 
+    //TODO: Get LEVEL from ViewModel -> Repo
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
         binding.textviewStartGame.setOnClickListener {
-            navigate(NavigationType.STARTGAME)
+            StartFragmentDirections.actionStartFragmentToGameFragment(
+                level = 1,
+                type = GameType.LEVELSGAME.ordinal
+            )
+
         }
         binding.imageviewSettings.setOnClickListener {
             navigate(NavigationType.STARTSETTINGS)

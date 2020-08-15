@@ -12,8 +12,7 @@ import androidx.navigation.fragment.findNavController
 import com.sokhibdzhon.readback.BaseApplication
 import com.sokhibdzhon.readback.R
 import com.sokhibdzhon.readback.databinding.FragmentSettingsBinding
-import com.sokhibdzhon.readback.util.enum.NavigationType
-import com.sokhibdzhon.readback.util.enum.navigate
+import com.sokhibdzhon.readback.util.enum.GameType
 import com.xw.repo.BubbleSeekBar
 import javax.inject.Inject
 
@@ -58,7 +57,7 @@ class SettingsFragment : Fragment() {
                 .apply()
             sharedPrefEditor.edit().putInt(getString(R.string.sharedpref_skips), skipsSeekbar)
                 .apply()
-            navigate(NavigationType.SETTINGSGAME)
+            SettingsFragmentDirections.actionSettingsFragmentToGameFragment(type = GameType.CUSTOMGAME.ordinal)
         }
 
         binding.seekbarTime.setProgress(timeSeekbar.toFloat())

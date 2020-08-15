@@ -13,6 +13,40 @@
         android:gravity="center"
         android:orientation="vertical">
 
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/imageview_skips"
+                android:layout_width="56dp"
+                android:layout_height="48dp"
+                android:layout_margin="@dimen/size_24dp"
+                android:background="@drawable/round_white_background"
+                android:contentDescription="@string/settings_icon"
+                android:elevation="@dimen/size_8dp"
+                android:minWidth="48dp"
+                android:minHeight="48dp"
+                android:padding="@dimen/size_2dp"
+                android:src="@drawable/ic_skip"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/size_2dp"
+                android:text="5"
+                android:textColor="@color/red_500"
+                android:textSize="12sp"
+                android:translationZ="90dp" />
+
+
+        </FrameLayout>
+
         <ImageView
             android:id="@+id/imageview_settings"
             android:layout_width="48dp"
@@ -79,7 +113,7 @@
             android:background="@drawable/round_gradient_text_background"
             android:gravity="center"
             android:padding="@dimen/size_16dp"
-            android:text="@string/start_playing"
+            android:text="LEVEL 1"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
 

@@ -26,6 +26,14 @@
             android:id="@+id/action_gameFragment_to_scoreFragment"
             app:destination="@id/scoreFragment"
             app:popUpTo="@id/startFragment" />
+        <argument
+            android:name="level"
+            android:defaultValue="1"
+            app:argType="integer" />
+        <argument
+            android:name="type"
+            android:defaultValue="1"
+            app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/scoreFragment"

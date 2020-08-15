@@ -14,4 +14,5 @@
     <string name="skips">%1$d skips</string>
     <string name="sharedpref_seconds">seconds</string>
     <string name="sharedpref_skips">skips</string>
+    <string name="settings_icon">settings</string>
 </resources>
