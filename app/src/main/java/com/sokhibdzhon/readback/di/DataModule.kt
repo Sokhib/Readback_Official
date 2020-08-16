@@ -1,5 +1,6 @@
 package com.sokhibdzhon.readback.di
 
+import android.content.SharedPreferences
 import com.google.firebase.firestore.FirebaseFirestore
 import com.sokhibdzhon.readback.data.network.custom.CustomGameDataSource
 import com.sokhibdzhon.readback.data.network.custom.CustomGameDataSourceImpl
@@ -22,8 +23,11 @@ import javax.inject.Singleton
 class DataModule {
     @Provides
     @Singleton
-    fun provideGameRepo(customGameDataSource: CustomGameDataSource): GameRepo =
-        GameRepoImpl(customGameDataSource)
+    fun provideGameRepo(
+        customGameDataSource: CustomGameDataSource,
+        sharedPreferences: SharedPreferences
+    ): GameRepo =
+        GameRepoImpl(customGameDataSource, sharedPreferences)
 
     @Provides
     @Singleton

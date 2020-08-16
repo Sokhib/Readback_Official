@@ -41,7 +41,10 @@ class StartFragment : Fragment() {
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.start_fragment, container, false)
         viewModel = ViewModelProvider(this, viewModelFactory).get(StartViewModel::class.java)
-        binding.lifecycleOwner = viewLifecycleOwner
+        binding.apply {
+            lifecycleOwner = viewLifecycleOwner
+            startviewmodel = viewModel
+        }
         //ad
         binding.adViewStart.loadAd(adRequest)
         return binding.root
@@ -53,7 +56,7 @@ class StartFragment : Fragment() {
 
         binding.textviewStartGame.setOnClickListener {
             val direction = StartFragmentDirections.actionStartFragmentToGameFragment(
-                level = 2,
+                level = viewModel.getLevel() ?: 1,
                 type = GameType.LEVELSGAME
             )
             this.findNavController().navigate(direction)

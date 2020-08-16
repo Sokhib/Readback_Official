@@ -1,5 +1,6 @@
 package com.sokhibdzhon.readback.data.repository
 
+import android.content.SharedPreferences
 import com.sokhibdzhon.readback.data.Resource
 import com.sokhibdzhon.readback.data.model.Word
 import com.sokhibdzhon.readback.data.network.custom.CustomGameDataSource
@@ -15,8 +16,15 @@ import javax.inject.Inject
 ╚═══════════════════════════════════════╝
  */
 
-class GameRepoImpl @Inject constructor(private val customGameDataSourceImpl: CustomGameDataSource) :
+class GameRepoImpl @Inject constructor(
+    private val customGameDataSourceImpl: CustomGameDataSource,
+    private val sharedPref: SharedPreferences
+) :
     GameRepo {
+    companion object {
+        private const val LEVELSKIPS = "levelSkips"
+        private const val LEVEL = "level"
+    }
 
     override fun getCustomGameWords(level: Int, type: GameType): Flow<Resource<MutableList<Word>>> {
         return if (type == GameType.CUSTOMGAME)
@@ -25,6 +33,10 @@ class GameRepoImpl @Inject constructor(private val customGameDataSourceImpl: Cus
             customGameDataSourceImpl.getWords(level.toString())
         }
     }
+
+    override fun getLevelSkips(): Int = sharedPref.getInt(LEVELSKIPS, 15)
+    override fun getLevel(): Int = sharedPref.getInt(LEVEL, 1)
+
 
 }
 

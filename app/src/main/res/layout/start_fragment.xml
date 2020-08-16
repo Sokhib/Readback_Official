@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
+        <variable
+            name="startviewmodel"
+            type="com.sokhibdzhon.readback.ui.start.StartViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -39,10 +43,11 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="@dimen/size_2dp"
-                android:text="5"
+                android:text="@{String.valueOf(startviewmodel.levelSkips)}"
                 android:textColor="@color/red_500"
                 android:textSize="12sp"
-                android:translationZ="90dp" />
+                android:translationZ="90dp"
+                tools:text="5" />
 
 
         </FrameLayout>
@@ -113,11 +118,11 @@
             android:background="@drawable/round_gradient_text_background"
             android:gravity="center"
             android:padding="@dimen/size_16dp"
-            android:text="LEVEL 1"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            app:levelText="@{startviewmodel.level}"
+            tools:text="LEVEL 1">
 
         </TextView>
     </androidx.constraintlayout.widget.ConstraintLayout>
