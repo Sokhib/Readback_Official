@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.ads.AdRequest
 import com.sokhibdzhon.readback.BaseApplication
@@ -25,6 +26,9 @@ class StartFragment : Fragment() {
     private lateinit var viewModel: StartViewModel
 
     @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    @Inject
     lateinit var adRequest: AdRequest
 
     override fun onAttach(context: Context) {
@@ -37,6 +41,7 @@ class StartFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.start_fragment, container, false)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(StartViewModel::class.java)
         binding.lifecycleOwner = viewLifecycleOwner
         //ad
         binding.adViewStart.loadAd(adRequest)

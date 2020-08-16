@@ -14,5 +14,9 @@ import kotlinx.coroutines.flow.Flow
  */
 
 interface CustomGameDataSource {
-    fun getWords(level: Int, type: Int): Flow<Resource<MutableList<Word>>>
+    private companion object {
+        private const val CUSTOM = "custom"
+    }
+
+    fun getWords(customOrLevel: String = CUSTOM): Flow<Resource<MutableList<Word>>>
 }
