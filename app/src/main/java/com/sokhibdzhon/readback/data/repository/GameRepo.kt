@@ -15,5 +15,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface GameRepo {
     //Custom Game
-    fun getCustomGameWords(): Flow<Resource<MutableList<Word>>>
+    fun getCustomGameWords(level: Int, type: Int): Flow<Resource<MutableList<Word>>>
 }

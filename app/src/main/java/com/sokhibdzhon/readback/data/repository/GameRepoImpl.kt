@@ -17,6 +17,6 @@ import javax.inject.Inject
 
 class GameRepoImpl @Inject constructor(private val customGameDataSourceImpl: CustomGameDataSource) :
     GameRepo {
-    override fun getCustomGameWords(): Flow<Resource<MutableList<Word>>> =
-        customGameDataSourceImpl.getWords()
+    override fun getCustomGameWords(level: Int, type: Int): Flow<Resource<MutableList<Word>>> =
+        customGameDataSourceImpl.getWords(level, type)
 }

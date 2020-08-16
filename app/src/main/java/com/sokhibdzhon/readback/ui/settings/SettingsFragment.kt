@@ -57,7 +57,10 @@ class SettingsFragment : Fragment() {
                 .apply()
             sharedPrefEditor.edit().putInt(getString(R.string.sharedpref_skips), skipsSeekbar)
                 .apply()
-            SettingsFragmentDirections.actionSettingsFragmentToGameFragment(type = GameType.CUSTOMGAME.ordinal)
+
+            val direction =
+                SettingsFragmentDirections.actionSettingsFragmentToGameFragment(type = GameType.CUSTOMGAME.type)
+            this.findNavController().navigate(direction)
         }
 
         binding.seekbarTime.setProgress(timeSeekbar.toFloat())

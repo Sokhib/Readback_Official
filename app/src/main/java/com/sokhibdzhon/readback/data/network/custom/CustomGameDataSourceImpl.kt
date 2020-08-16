@@ -3,6 +3,7 @@ package com.sokhibdzhon.readback.data.network.custom
 import com.google.firebase.firestore.FirebaseFirestore
 import com.sokhibdzhon.readback.data.Resource
 import com.sokhibdzhon.readback.data.model.Word
+import com.sokhibdzhon.readback.util.enum.GameType
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -25,10 +26,14 @@ class CustomGameDataSourceImpl @Inject constructor(private val firestore: Fireba
         private const val WORDS = "words"
     }
 
-    override fun getWords(): Flow<Resource<MutableList<Word>>> = callbackFlow {
+    override fun getWords(level: Int, type: Int): Flow<Resource<MutableList<Word>>> = callbackFlow {
         var words: MutableList<Word>? = null
         offer(Resource.loading())
-        val eventDocument = firestore.collection(LEVELS).document(CUSTOM).collection(WORDS)
+        val eventDocument = if (type == GameType.CUSTOMGAME.type) {
+            firestore.collection(LEVELS).document(CUSTOM).collection(WORDS)
+        } else {
+            firestore.collection(LEVELS).document(level.toString()).collection(WORDS)
+        }
         val subscription =
             eventDocument.addSnapshotListener { querySnapshot, _ ->
                 querySnapshot?.let { document ->

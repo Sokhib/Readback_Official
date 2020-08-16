@@ -1,19 +1,20 @@
 package com.sokhibdzhon.readback.ui.game
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.navigation.get
 import com.google.android.material.snackbar.Snackbar
 import com.sokhibdzhon.readback.BaseApplication
@@ -35,9 +36,7 @@ class GameFragment : Fragment(), View.OnClickListener {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
-
-    @Inject
-    lateinit var sharedPrefEditor: SharedPreferences
+    val args: GameFragmentArgs by navArgs()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -61,6 +60,10 @@ class GameFragment : Fragment(), View.OnClickListener {
             binding.textOption3,
             binding.textOption4
         )
+        lifecycleScope.launchWhenCreated {
+            viewModel.setType(args.type)
+            viewModel.setLevel(args.level)
+        }
         return binding.root
     }
 
@@ -75,6 +78,11 @@ class GameFragment : Fragment(), View.OnClickListener {
             if (binding.circularTimeView.progressMax == Float.MAX_VALUE)
                 binding.circularTimeView.progressMax = timeLeft.toFloat()
             binding.circularTimeView.setProgressWithAnimation(timeLeft.toFloat(), 1000)
+        })
+        //level
+        viewModel.level.observe(viewLifecycleOwner, Observer { level ->
+            Timber.d("Level: $level Type: ${args.type}")
+            viewModel.getWords(level, args.type)
         })
         //words
         viewModel.wordList.observe(viewLifecycleOwner, Observer { words ->
@@ -112,8 +120,6 @@ class GameFragment : Fragment(), View.OnClickListener {
                     .show()
                 binding.skip.setOnClickListener(null)
             }
-
-
         })
 
         //Game finish
@@ -128,6 +134,7 @@ class GameFragment : Fragment(), View.OnClickListener {
     override fun onClick(v: View?) {
         viewModel.checkForCorrectness((v as TextView).text.toString())
         isActiveOptions(false)
+        //TODO: If isCorrect update counter and load next word else call onGameFinished according to GameType :)
         viewModel.isCorrect()?.let { isCorrect ->
             setOptionBackground(v, isCorrect)
         }
@@ -135,7 +142,8 @@ class GameFragment : Fragment(), View.OnClickListener {
             coroutineScope {
                 delay(500)
                 options.forEach { option ->
-                    option.background = resources.getDrawable(
+                    option.background = ResourcesCompat.getDrawable(
+                        resources,
                         R.drawable.round_white_background,
                         requireContext().theme
                     )
@@ -164,19 +172,22 @@ class GameFragment : Fragment(), View.OnClickListener {
 
     private fun setOptionBackground(v: View, isCorrect: Boolean) {
         v.background = if (isCorrect) {
-            resources.getDrawable(
+            ResourcesCompat.getDrawable(
+                resources,
                 R.drawable.round_stroke_green_background,
                 requireContext().theme
             )
         } else {
             options.forEach { option ->
                 if (option.text.toString() == viewModel.current.value!!.correct)
-                    option.background = resources.getDrawable(
+                    option.background = ResourcesCompat.getDrawable(
+                        resources,
                         R.drawable.round_stroke_green_background,
                         requireContext().theme
                     )
             }
-            resources.getDrawable(
+            ResourcesCompat.getDrawable(
+                resources,
                 R.drawable.round_stroke_red_background,
                 requireContext().theme
             )

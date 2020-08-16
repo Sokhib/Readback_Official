@@ -61,6 +61,14 @@ class GameViewModel @Inject constructor(
     val skipNumber: LiveData<Int>
         get() = _skipNumber
 
+    private val _type = MutableLiveData(0)
+    val type: LiveData<Int>
+        get() = _type
+
+    private val _level = MutableLiveData(1)
+    val level: LiveData<Int>
+        get() = _level
+
 
     init {
         _correct.value = false
@@ -71,11 +79,10 @@ class GameViewModel @Inject constructor(
             _skipNumber.value = sharedPref.getInt(SKIPS, 5)
         }
         prepareTimer()
-        getWords()
     }
 
-    private fun getWords() {
-        gameRepoImpl.getCustomGameWords()
+    fun getWords(level: Int, type: Int) {
+        gameRepoImpl.getCustomGameWords(level, type)
             .onEach {
                 Timber.d("${it.status}")
                 if (it.status == Status.SUCCESS) {
@@ -130,6 +137,14 @@ class GameViewModel @Inject constructor(
     }
 
     fun isCorrect() = correct.value
+
+    fun setType(type: Int) {
+        _type.value = type
+    }
+
+    fun setLevel(level: Int) {
+        _level.value = level
+    }
 
     fun onGameFinished() {
         _gameFinish.value = false
