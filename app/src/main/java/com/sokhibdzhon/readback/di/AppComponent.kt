@@ -3,6 +3,7 @@ package com.sokhibdzhon.readback.di
 import android.content.Context
 import com.sokhibdzhon.readback.di.viewmodel.ViewModelModule
 import com.sokhibdzhon.readback.ui.game.GameFragment
+import com.sokhibdzhon.readback.ui.levelscore.LevelScoreFragment
 import com.sokhibdzhon.readback.ui.score.ScoreFragment
 import com.sokhibdzhon.readback.ui.settings.SettingsFragment
 import com.sokhibdzhon.readback.ui.start.StartFragment
@@ -31,5 +32,7 @@ interface AppComponent {
     fun inject(scoreFragment: ScoreFragment)
     fun inject(startFragment: StartFragment)
     fun inject(settingsFragment: SettingsFragment)
+    fun inject(levelScoreFragment: LevelScoreFragment)
+
 
 }

@@ -90,7 +90,7 @@ dependencies {
 
     //seekbar
     implementation 'com.xw.repo:bubbleseekbar:3.20'
-
+    implementation "com.airbnb.android:lottie:$lottie_version"
 
     //test
     testImplementation "junit:junit:$junit_junit_version"

@@ -10,6 +10,7 @@ import com.sokhibdzhon.readback.data.Resource
 import com.sokhibdzhon.readback.data.Status
 import com.sokhibdzhon.readback.data.model.Word
 import com.sokhibdzhon.readback.data.repository.GameRepoImpl
+import com.sokhibdzhon.readback.util.enums.GameType
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -25,8 +26,8 @@ class GameViewModel @Inject constructor(
     private companion object {
         private const val DONE = 0L
         private const val ONE_SECOND = 1000L
-        private const val CORRECT_POINTS = 10
-        private const val INCORRECT_POINTS = -5
+        private const val CORRECT_POINTS = 1
+        private const val INCORRECT_POINTS = -1
         private const val SECONDS = "seconds"
         private const val SKIPS = "skips"
 
@@ -61,8 +62,8 @@ class GameViewModel @Inject constructor(
     val skipNumber: LiveData<Int>
         get() = _skipNumber
 
-    private val _type = MutableLiveData(0)
-    val type: LiveData<Int>
+    private val _type = MutableLiveData(GameType.CUSTOMGAME)
+    val type: LiveData<GameType>
         get() = _type
 
     private val _level = MutableLiveData(1)
@@ -81,7 +82,7 @@ class GameViewModel @Inject constructor(
         prepareTimer()
     }
 
-    fun getWords(level: Int, type: Int) {
+    fun getWords(level: Int, type: GameType) {
         gameRepoImpl.getCustomGameWords(level, type)
             .onEach {
                 Timber.d("${it.status}")
@@ -118,18 +119,21 @@ class GameViewModel @Inject constructor(
         if (!_wordList.value?.data.isNullOrEmpty()) {
             _current.value = _wordList.value!!.data!!.removeAt(0)
         } else {
+            _correct.value = true
             _gameFinish.value = true
         }
     }
 
-    fun checkForCorrectness(text: String) {
+    fun checkForCorrectness(text: String): Boolean {
         _correct.value = if (current.value!!.correct == text) {
             updateScore(CORRECT_POINTS)
             true
         } else {
             updateScore(INCORRECT_POINTS)
+            _gameFinish.value = true
             false
         }
+        return correct.value!!
     }
 
     private fun updateScore(value: Int) {
@@ -138,7 +142,7 @@ class GameViewModel @Inject constructor(
 
     fun isCorrect() = correct.value
 
-    fun setType(type: Int) {
+    fun setType(type: GameType) {
         _type.value = type
     }
 

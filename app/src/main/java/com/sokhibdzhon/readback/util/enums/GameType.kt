@@ -1,9 +1,4 @@
-package com.sokhibdzhon.readback.data.repository
-
-import com.sokhibdzhon.readback.data.Resource
-import com.sokhibdzhon.readback.data.model.Word
-import com.sokhibdzhon.readback.util.enums.GameType
-import kotlinx.coroutines.flow.Flow
+package com.sokhibdzhon.readback.util.enums
 
 
 /**     I ❤ Code:)
@@ -14,7 +9,6 @@ import kotlinx.coroutines.flow.Flow
 ╚═══════════════════════════════════════╝
  */
 
-interface GameRepo {
-    //Custom Game
-    fun getCustomGameWords(level: Int, type: GameType): Flow<Resource<MutableList<Word>>>
+enum class GameType {
+    CUSTOMGAME, LEVELSGAME
 }

@@ -13,10 +13,9 @@ import com.google.android.gms.ads.AdRequest
 import com.sokhibdzhon.readback.BaseApplication
 import com.sokhibdzhon.readback.R
 import com.sokhibdzhon.readback.databinding.StartFragmentBinding
-import com.sokhibdzhon.readback.util.enum.GameType
-import com.sokhibdzhon.readback.util.enum.NavigationType
-import com.sokhibdzhon.readback.util.enum.navigate
-import timber.log.Timber
+import com.sokhibdzhon.readback.util.enums.GameType
+import com.sokhibdzhon.readback.util.enums.NavigationType
+import com.sokhibdzhon.readback.util.enums.navigate
 import javax.inject.Inject
 
 //TODO: onSkips click Snackbar how many skips left.
@@ -53,10 +52,9 @@ class StartFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         binding.textviewStartGame.setOnClickListener {
-            Timber.d("Type in Start ${GameType.LEVELSGAME.type}")
             val direction = StartFragmentDirections.actionStartFragmentToGameFragment(
                 level = 2,
-                type = GameType.LEVELSGAME.type
+                type = GameType.LEVELSGAME
             )
             this.findNavController().navigate(direction)
 

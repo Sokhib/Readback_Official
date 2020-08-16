@@ -1,4 +1,4 @@
-package com.sokhibdzhon.readback.util.enum
+package com.sokhibdzhon.readback.util.enums
 
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavDirections

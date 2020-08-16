@@ -29,6 +29,7 @@ buildscript {
 
         glide_glide_version = '4.11.0'
         glide_compiler_version = '4.11.0'
+        lottie_version = "3.4.0"
 
         firebase_analytics_version = '17.5.0'
         firebase_crashlytics = '17.2.1'

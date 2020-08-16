@@ -1,4 +1,4 @@
-package com.sokhibdzhon.readback.util.enum
+package com.sokhibdzhon.readback.util.enums
 
 
 /**     I ❤ Code:)
@@ -9,6 +9,6 @@ package com.sokhibdzhon.readback.util.enum
 ╚═══════════════════════════════════════╝
  */
 
-enum class GameType(val type: Int) {
-    CUSTOMGAME(1), LEVELSGAME(2)
+enum class LevelResult {
+    SUCCESS, FAIL
 }

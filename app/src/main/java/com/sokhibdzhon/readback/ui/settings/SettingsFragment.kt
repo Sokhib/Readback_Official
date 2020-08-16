@@ -12,7 +12,7 @@ import androidx.navigation.fragment.findNavController
 import com.sokhibdzhon.readback.BaseApplication
 import com.sokhibdzhon.readback.R
 import com.sokhibdzhon.readback.databinding.FragmentSettingsBinding
-import com.sokhibdzhon.readback.util.enum.GameType
+import com.sokhibdzhon.readback.util.enums.GameType
 import com.xw.repo.BubbleSeekBar
 import javax.inject.Inject
 
@@ -59,7 +59,7 @@ class SettingsFragment : Fragment() {
                 .apply()
 
             val direction =
-                SettingsFragmentDirections.actionSettingsFragmentToGameFragment(type = GameType.CUSTOMGAME.type)
+                SettingsFragmentDirections.actionSettingsFragmentToGameFragment(type = GameType.CUSTOMGAME)
             this.findNavController().navigate(direction)
         }
 

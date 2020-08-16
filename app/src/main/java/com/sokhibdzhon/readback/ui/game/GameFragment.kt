@@ -21,6 +21,8 @@ import com.sokhibdzhon.readback.BaseApplication
 import com.sokhibdzhon.readback.R
 import com.sokhibdzhon.readback.data.Status
 import com.sokhibdzhon.readback.databinding.GameFragmentBinding
+import com.sokhibdzhon.readback.util.enums.GameType
+import com.sokhibdzhon.readback.util.enums.LevelResult
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -81,7 +83,6 @@ class GameFragment : Fragment(), View.OnClickListener {
         })
         //level
         viewModel.level.observe(viewLifecycleOwner, Observer { level ->
-            Timber.d("Level: $level Type: ${args.type}")
             viewModel.getWords(level, args.type)
         })
         //words
@@ -125,19 +126,19 @@ class GameFragment : Fragment(), View.OnClickListener {
         //Game finish
         viewModel.gameFinish.observe(viewLifecycleOwner, Observer { hasFinished ->
             if (hasFinished) {
-                gameFinished()
+                if (viewModel.isCorrect()!!)
+                    gameFinished(LevelResult.SUCCESS)
+                else
+                    gameFinished(LevelResult.FAIL)
                 viewModel.onGameFinished()
             }
         })
     }
 
     override fun onClick(v: View?) {
-        viewModel.checkForCorrectness((v as TextView).text.toString())
         isActiveOptions(false)
-        //TODO: If isCorrect update counter and load next word else call onGameFinished according to GameType :)
-        viewModel.isCorrect()?.let { isCorrect ->
-            setOptionBackground(v, isCorrect)
-        }
+        val isCorrect = viewModel.checkForCorrectness((v as TextView).text.toString())
+        setOptionBackground(v, isCorrect)
         lifecycleScope.launch {
             coroutineScope {
                 delay(500)
@@ -157,12 +158,17 @@ class GameFragment : Fragment(), View.OnClickListener {
     }
 
     //Functions
-    private fun gameFinished() {
+    private fun gameFinished(levelResult: LevelResult) {
         runBlocking {
             delay(500)
         }
-        val action =
+        val action = if (args.type == GameType.CUSTOMGAME)
             GameFragmentDirections.actionGameFragmentToScoreFragment(viewModel.score.value ?: 0)
+        else {
+            if (levelResult == LevelResult.SUCCESS)
+                GameFragmentDirections.actionGameFragmentToLevelScoreFragment(LevelResult.SUCCESS)
+            else GameFragmentDirections.actionGameFragmentToLevelScoreFragment(LevelResult.FAIL)
+        }
         with(findNavController()) {
             if (currentDestination != graph[R.id.scoreFragment]) {
                 navigate(action)

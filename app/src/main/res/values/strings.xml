@@ -15,4 +15,5 @@
     <string name="sharedpref_seconds">seconds</string>
     <string name="sharedpref_skips">skips</string>
     <string name="settings_icon">settings</string>
+    <string name="continue_game">CONTINUE</string>
 </resources>

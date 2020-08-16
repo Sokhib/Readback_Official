@@ -23,8 +23,8 @@ import com.google.android.gms.ads.AdRequest
 import com.sokhibdzhon.readback.BaseApplication
 import com.sokhibdzhon.readback.R
 import com.sokhibdzhon.readback.databinding.ScoreFragmentBinding
-import com.sokhibdzhon.readback.util.enum.NavigationType
-import com.sokhibdzhon.readback.util.enum.navigate
+import com.sokhibdzhon.readback.util.enums.NavigationType
+import com.sokhibdzhon.readback.util.enums.navigate
 import javax.inject.Inject
 
 //TODO: Move all the logic to ViewModel.

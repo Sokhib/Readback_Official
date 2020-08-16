@@ -32,8 +32,12 @@
             app:argType="integer" />
         <argument
             android:name="type"
-            android:defaultValue="1"
-            app:argType="integer" />
+            android:defaultValue="CUSTOMGAME"
+            app:argType="com.sokhibdzhon.readback.util.enums.GameType" />
+        <action
+            android:id="@+id/action_gameFragment_to_levelScoreFragment"
+            app:destination="@id/levelScoreFragment"
+            app:popUpTo="@id/startFragment" />
     </fragment>
     <fragment
         android:id="@+id/scoreFragment"
@@ -64,4 +68,20 @@
             app:destination="@id/gameFragment"
             app:popUpTo="@id/startFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/levelScoreFragment"
+        android:name="com.sokhibdzhon.readback.ui.levelscore.LevelScoreFragment"
+        android:label="LevelScoreFragment"
+        tools:layout="@layout/level_score_fragment">
+        <argument
+            android:name="result"
+            android:defaultValue="FAIL"
+            app:argType="com.sokhibdzhon.readback.util.enums.LevelResult" />
+        <action
+            android:id="@+id/action_levelScoreFragment_to_startFragment"
+            app:destination="@id/startFragment"
+            app:popUpTo="@id/startFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
 </navigation>
