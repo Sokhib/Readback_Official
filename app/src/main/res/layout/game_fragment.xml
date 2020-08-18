@@ -6,6 +6,10 @@
     <data>
 
         <variable
+            name="size"
+            type="Integer" />
+
+        <variable
             name="gmviewmodel"
             type="com.sokhibdzhon.readback.ui.game.GameViewModel" />
     </data>
@@ -84,7 +88,9 @@
                     android:minHeight="48dp"
                     android:paddingHorizontal="@dimen/size_8dp"
                     android:textAppearance="@style/TextAppearance.AppTheme.Display.White"
-                    app:spanText="@{gmviewmodel.score}"
+                    app:score="@{gmviewmodel.score}"
+                    app:size="@{size}"
+                    app:type="@{gmviewmodel.type}"
                     tools:text="20" />
             </LinearLayout>
             <!--    cover with white and animate-->

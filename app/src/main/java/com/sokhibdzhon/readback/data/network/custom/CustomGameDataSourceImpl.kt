@@ -7,6 +7,7 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import javax.inject.Inject
+import javax.inject.Singleton
 
 
 /**     I ❤ Code:)
@@ -16,7 +17,7 @@ import javax.inject.Inject
 ║ sokhibsaid@gmail.com                  ║
 ╚═══════════════════════════════════════╝
  */
-
+@Singleton
 class CustomGameDataSourceImpl @Inject constructor(private val firestore: FirebaseFirestore) :
     CustomGameDataSource {
     private companion object {

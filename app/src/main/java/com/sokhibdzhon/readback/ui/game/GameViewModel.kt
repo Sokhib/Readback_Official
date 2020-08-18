@@ -1,6 +1,5 @@
 package com.sokhibdzhon.readback.ui.game
 
-import android.content.SharedPreferences
 import android.os.CountDownTimer
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -11,26 +10,22 @@ import com.sokhibdzhon.readback.data.Status
 import com.sokhibdzhon.readback.data.model.Word
 import com.sokhibdzhon.readback.data.repository.GameRepoImpl
 import com.sokhibdzhon.readback.util.enums.GameType
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 import javax.inject.Inject
 
-//App doing too much shit on MainThread get data from shared from back thread.
-//Get sharedPref in back then set to timer then get words then start.
 class GameViewModel @Inject constructor(
-    val gameRepoImpl: GameRepoImpl,
-    sharedPref: SharedPreferences
+    private val gameRepoImpl: GameRepoImpl
 ) : ViewModel() {
     private companion object {
         private const val DONE = 0L
         private const val ONE_SECOND = 1000L
         private const val CORRECT_POINTS = 1
         private const val INCORRECT_POINTS = -1
-        private const val SECONDS = "seconds"
-        private const val SKIPS = "skips"
-
     }
 
     private var _wordList = MutableLiveData<Resource<MutableList<Word>>>()
@@ -38,7 +33,7 @@ class GameViewModel @Inject constructor(
         get() = _wordList
 
     private val _correct = MutableLiveData<Boolean>()
-    private val correct: LiveData<Boolean>
+    val correct: LiveData<Boolean>
         get() = _correct
 
     private val _gameFinish = MutableLiveData<Boolean>()
@@ -54,6 +49,7 @@ class GameViewModel @Inject constructor(
         get() = _score
 
     private lateinit var timer: CountDownTimer
+
     private val _timeLeft = MutableLiveData<Long>()
     val timeLeft: LiveData<Long>
         get() = _timeLeft
@@ -66,18 +62,13 @@ class GameViewModel @Inject constructor(
     val type: LiveData<GameType>
         get() = _type
 
-    private val _level = MutableLiveData(1)
-    val level: LiveData<Int>
-        get() = _level
-
-
     init {
         _correct.value = false
         _gameFinish.value = false
         _score.value = 0
         viewModelScope.launch {
-            _timeLeft.value = sharedPref.getInt(SECONDS, 15).toLong()
-            _skipNumber.value = sharedPref.getInt(SKIPS, 5)
+            _timeLeft.value = gameRepoImpl.getTimeLeft()
+            _skipNumber.value = gameRepoImpl.getCustomSkips()
         }
         prepareTimer()
     }
@@ -88,7 +79,7 @@ class GameViewModel @Inject constructor(
                 Timber.d("${it.status}")
                 if (it.status == Status.SUCCESS) {
                     _wordList.value = it
-                    Timber.d("${_wordList.value?.data?.size}")
+                    Timber.d("Sizein ViewModel: ${it.data?.size}")
                     timer.start()
                 }
             }.launchIn(viewModelScope)
@@ -100,6 +91,7 @@ class GameViewModel @Inject constructor(
             ONE_SECOND
         ) {
             override fun onFinish() {
+                _correct.value = false
                 _gameFinish.value = true
                 _timeLeft.value = DONE
             }
@@ -119,7 +111,6 @@ class GameViewModel @Inject constructor(
         if (!_wordList.value?.data.isNullOrEmpty()) {
             _current.value = _wordList.value!!.data!!.removeAt(0)
         } else {
-            _correct.value = true
             _gameFinish.value = true
         }
     }
@@ -130,9 +121,9 @@ class GameViewModel @Inject constructor(
             true
         } else {
             updateScore(INCORRECT_POINTS)
-            _gameFinish.value = true
             false
         }
+        Timber.d("Is correct in ViewModel checkForCorrectness: ${correct.value}")
         return correct.value!!
     }
 
@@ -142,17 +133,22 @@ class GameViewModel @Inject constructor(
 
     fun isCorrect() = correct.value
 
+    fun onGameFinished() {
+        runBlocking {
+            delay(500)
+        }
+        _gameFinish.value = false
+    }
+
     fun setType(type: GameType) {
         _type.value = type
     }
 
-    fun setLevel(level: Int) {
-        _level.value = level
+    fun setGameFinish(isFinished: Boolean) {
+        _gameFinish.value = isFinished
     }
 
-    fun onGameFinished() {
-        _gameFinish.value = false
-    }
+    fun getSkipNumber() = skipNumber.value
 
     override fun onCleared() {
         super.onCleared()

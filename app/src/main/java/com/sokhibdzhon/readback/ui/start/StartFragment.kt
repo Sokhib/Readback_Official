@@ -50,7 +50,6 @@ class StartFragment : Fragment() {
         return binding.root
     }
 
-    //TODO: Get LEVEL from ViewModel -> Repo
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 

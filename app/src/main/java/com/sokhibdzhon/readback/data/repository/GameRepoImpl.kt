@@ -7,6 +7,7 @@ import com.sokhibdzhon.readback.data.network.custom.CustomGameDataSource
 import com.sokhibdzhon.readback.util.enums.GameType
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
+import javax.inject.Singleton
 
 /**     I ❤ Code:)
 ╔═══════════════════════════════════════╗
@@ -15,7 +16,7 @@ import javax.inject.Inject
 ║ sokhibsaid@gmail.com                  ║
 ╚═══════════════════════════════════════╝
  */
-
+@Singleton
 class GameRepoImpl @Inject constructor(
     private val customGameDataSourceImpl: CustomGameDataSource,
     private val sharedPref: SharedPreferences
@@ -24,6 +25,10 @@ class GameRepoImpl @Inject constructor(
     companion object {
         private const val LEVELSKIPS = "levelSkips"
         private const val LEVEL = "level"
+        private const val SECONDS = "seconds"
+        private const val SKIPS = "skips"
+
+
     }
 
     override fun getCustomGameWords(level: Int, type: GameType): Flow<Resource<MutableList<Word>>> {
@@ -34,9 +39,10 @@ class GameRepoImpl @Inject constructor(
         }
     }
 
-    override fun getLevelSkips(): Int = sharedPref.getInt(LEVELSKIPS, 15)
+    override fun getLevelSkips(): Int = sharedPref.getInt(LEVELSKIPS, 1)
     override fun getLevel(): Int = sharedPref.getInt(LEVEL, 1)
-
+    override fun getTimeLeft(): Long = sharedPref.getInt(SECONDS, 15).toLong()
+    override fun getCustomSkips(): Int = sharedPref.getInt(SKIPS, 1)
 
 }
 

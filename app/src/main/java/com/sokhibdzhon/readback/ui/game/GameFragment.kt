@@ -26,11 +26,10 @@ import com.sokhibdzhon.readback.util.enums.LevelResult
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 import javax.inject.Inject
 
-
+//TODO: Skip edince +1 puan eklensin
 class GameFragment : Fragment(), View.OnClickListener {
 
     private lateinit var viewModel: GameViewModel
@@ -38,8 +37,8 @@ class GameFragment : Fragment(), View.OnClickListener {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
-    val args: GameFragmentArgs by navArgs()
-
+    private val args: GameFragmentArgs by navArgs()
+    private var isCorrect = false
     override fun onAttach(context: Context) {
         super.onAttach(context)
         (requireActivity().applicationContext as BaseApplication).appGraph.inject(this)
@@ -64,7 +63,7 @@ class GameFragment : Fragment(), View.OnClickListener {
         )
         lifecycleScope.launchWhenCreated {
             viewModel.setType(args.type)
-            viewModel.setLevel(args.level)
+            viewModel.getWords(args.level, args.type)
         }
         return binding.root
     }
@@ -81,25 +80,27 @@ class GameFragment : Fragment(), View.OnClickListener {
                 binding.circularTimeView.progressMax = timeLeft.toFloat()
             binding.circularTimeView.setProgressWithAnimation(timeLeft.toFloat(), 1000)
         })
-        //level
-        viewModel.level.observe(viewLifecycleOwner, Observer { level ->
-            viewModel.getWords(level, args.type)
-        })
         //words
         viewModel.wordList.observe(viewLifecycleOwner, Observer { words ->
             when (words.status) {
                 Status.SUCCESS -> {
+                    binding.size = words.data?.size
                     options.forEach { option ->
                         option.setOnClickListener(this)
                     }
                     binding.skip.setOnClickListener {
-                        viewModel.nextWord()
-                        viewModel.minusSkip()
-                        startAnimation()
+                        if (viewModel.getSkipNumber() == 0) {
+                            Snackbar.make(binding.root, "No Skips Left", Snackbar.LENGTH_SHORT)
+                                .show()
+                            binding.skip.setOnClickListener(null)
+                        } else {
+                            viewModel.nextWord()
+                            viewModel.minusSkip()
+                            startAnimation()
+                        }
                     }
                     viewModel.nextWord()
                     startAnimation()
-                    Timber.d("SUCCESS...")
                 }
                 Status.ERROR -> {
                     Toast.makeText(
@@ -113,23 +114,10 @@ class GameFragment : Fragment(), View.OnClickListener {
                 }
             }
         })
-        //skipNumber
-        viewModel.skipNumber.observe(viewLifecycleOwner, Observer { numberOfSkips ->
-
-            if (numberOfSkips == 0) {
-                Snackbar.make(binding.root, "No Skips Left", Snackbar.LENGTH_SHORT)
-                    .show()
-                binding.skip.setOnClickListener(null)
-            }
-        })
-
         //Game finish
         viewModel.gameFinish.observe(viewLifecycleOwner, Observer { hasFinished ->
             if (hasFinished) {
-                if (viewModel.isCorrect()!!)
-                    gameFinished(LevelResult.SUCCESS)
-                else
-                    gameFinished(LevelResult.FAIL)
+                gameFinished()
                 viewModel.onGameFinished()
             }
         })
@@ -137,8 +125,10 @@ class GameFragment : Fragment(), View.OnClickListener {
 
     override fun onClick(v: View?) {
         isActiveOptions(false)
-        val isCorrect = viewModel.checkForCorrectness((v as TextView).text.toString())
+        isCorrect = viewModel.checkForCorrectness((v as TextView).text.toString())
         setOptionBackground(v, isCorrect)
+        //set game finish
+        if (!isCorrect) viewModel.setGameFinish(true)
         lifecycleScope.launch {
             coroutineScope {
                 delay(500)
@@ -158,19 +148,18 @@ class GameFragment : Fragment(), View.OnClickListener {
     }
 
     //Functions
-    private fun gameFinished(levelResult: LevelResult) {
-        runBlocking {
-            delay(500)
-        }
+    private fun gameFinished() {
         val action = if (args.type == GameType.CUSTOMGAME)
             GameFragmentDirections.actionGameFragmentToScoreFragment(viewModel.score.value ?: 0)
         else {
-            if (levelResult == LevelResult.SUCCESS)
+            if (viewModel.isCorrect()!!) {
+                Timber.d("isCorrect in Main Game Finish: $isCorrect")
+                Timber.d("viewModel.isCorrect() in Main Game Finish: ${viewModel.isCorrect()}")
                 GameFragmentDirections.actionGameFragmentToLevelScoreFragment(LevelResult.SUCCESS)
-            else GameFragmentDirections.actionGameFragmentToLevelScoreFragment(LevelResult.FAIL)
+            } else GameFragmentDirections.actionGameFragmentToLevelScoreFragment(LevelResult.FAIL)
         }
         with(findNavController()) {
-            if (currentDestination != graph[R.id.scoreFragment]) {
+            if (currentDestination != graph[R.id.scoreFragment] || currentDestination != graph[R.id.levelScoreFragment]) {
                 navigate(action)
             }
         }
@@ -184,8 +173,9 @@ class GameFragment : Fragment(), View.OnClickListener {
                 requireContext().theme
             )
         } else {
+            val correct = viewModel.current.value!!.correct
             options.forEach { option ->
-                if (option.text.toString() == viewModel.current.value!!.correct)
+                if (option.text.toString() == correct)
                     option.background = ResourcesCompat.getDrawable(
                         resources,
                         R.drawable.round_stroke_green_background,
