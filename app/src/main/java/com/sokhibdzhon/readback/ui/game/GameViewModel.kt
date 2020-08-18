@@ -127,7 +127,7 @@ class GameViewModel @Inject constructor(
         return correct.value!!
     }
 
-    private fun updateScore(value: Int) {
+    fun updateScore(value: Int) {
         _score.value = (score.value)?.plus(value)
     }
 

@@ -96,6 +96,7 @@ class GameFragment : Fragment(), View.OnClickListener {
                         } else {
                             viewModel.nextWord()
                             viewModel.minusSkip()
+                            viewModel.updateScore(1)
                             startAnimation()
                         }
                     }
