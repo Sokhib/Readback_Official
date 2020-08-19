@@ -32,13 +32,11 @@ class GameRepoImpl @Inject constructor(
         }
     }
 
-    override fun getLevel(): Int = sharedPref.getInt(Constants.LEVEL, 1)
     override fun getTimeLeft(type: GameType): Long =
         when (type) {
             GameType.CUSTOMGAME -> sharedPref.getInt(Constants.CUSTOM_SECONDS, 15).toLong()
             GameType.LEVELSGAME -> sharedPref.getInt(Constants.LEVEL_SECONDS, 30).toLong()
         }
-
 
     override
     fun getSkips(type: GameType): Int =
@@ -47,11 +45,13 @@ class GameRepoImpl @Inject constructor(
             GameType.LEVELSGAME -> sharedPref.getInt(Constants.LEVEL_SKIPS, 5)
         }
 
-    override fun getBestScore(): Int = sharedPref.getInt(Constants.BEST_SCORE, 0)
-
-
     override fun updateBestScore(bestScore: Int) {
         sharedPref.edit().putInt(Constants.BEST_SCORE, bestScore).apply()
     }
+
+    override val bestScore: Int
+        get() = sharedPref.getInt(Constants.BEST_SCORE, 0)
+    override val level: Int
+        get() = sharedPref.getInt(Constants.LEVEL, 1)
 }
 

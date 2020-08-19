@@ -21,7 +21,7 @@ class StartViewModel @Inject constructor(gameRepoImpl: GameRepoImpl) : ViewModel
     init {
         viewModelScope.launch {
             _levelSkips.value = gameRepoImpl.getSkips(GameType.LEVELSGAME)
-            _level.value = gameRepoImpl.getLevel()
+            _level.value = gameRepoImpl.level
         }
 
     }

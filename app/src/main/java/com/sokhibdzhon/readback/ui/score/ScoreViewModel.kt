@@ -21,7 +21,7 @@ class ScoreViewModel @Inject constructor(private val gameRepoImpl: GameRepoImpl)
 
     init {
         viewModelScope.launch {
-            _bestScore.value = gameRepoImpl.getBestScore()
+            _bestScore.value = gameRepoImpl.bestScore
         }
     }
 

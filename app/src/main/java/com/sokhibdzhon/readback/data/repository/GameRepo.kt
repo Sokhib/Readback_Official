@@ -19,10 +19,9 @@ interface GameRepo {
     fun getCustomGameWords(level: Int, type: GameType): Flow<Resource<MutableList<Word>>>
 
     //SharedPref values
-    fun getLevel(): Int
     fun getTimeLeft(type: GameType): Long
     fun getSkips(type: GameType): Int
-    fun getBestScore(): Int
     fun updateBestScore(bestScore: Int)
-
+    val bestScore: Int
+    val level: Int
 }
