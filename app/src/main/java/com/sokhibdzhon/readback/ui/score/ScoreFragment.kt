@@ -2,7 +2,6 @@ package com.sokhibdzhon.readback.ui.score
 
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.graphics.Typeface.BOLD
 import android.os.Bundle
 import android.text.Spannable
@@ -38,9 +37,6 @@ class ScoreFragment : Fragment() {
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
     val args: ScoreFragmentArgs by navArgs()
-
-    @Inject
-    lateinit var sharedPrefEditor: SharedPreferences
 
     @Inject
     lateinit var adRequest: AdRequest

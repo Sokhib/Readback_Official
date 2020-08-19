@@ -46,5 +46,12 @@ class GameRepoImpl @Inject constructor(
             GameType.CUSTOMGAME -> sharedPref.getInt(Constants.CUSTOM_SKIPS, 1)
             GameType.LEVELSGAME -> sharedPref.getInt(Constants.LEVEL_SKIPS, 5)
         }
+
+    override fun getBestScore(): Int = sharedPref.getInt(Constants.BEST_SCORE, 0)
+
+
+    override fun updateBestScore(bestScore: Int) {
+        sharedPref.edit().putInt(Constants.BEST_SCORE, bestScore).apply()
+    }
 }
 

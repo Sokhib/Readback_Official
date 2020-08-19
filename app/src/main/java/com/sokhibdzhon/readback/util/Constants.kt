@@ -16,5 +16,6 @@ class Constants {
         const val LEVEL_SECONDS = "level_seconds"
         const val LEVEL_SKIPS = "level_skips"
         const val LEVEL = "level"
+        const val BEST_SCORE = "best_score"
     }
 }

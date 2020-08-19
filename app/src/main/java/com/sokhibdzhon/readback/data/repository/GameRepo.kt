@@ -22,5 +22,7 @@ interface GameRepo {
     fun getLevel(): Int
     fun getTimeLeft(type: GameType): Long
     fun getSkips(type: GameType): Int
+    fun getBestScore(): Int
+    fun updateBestScore(bestScore: Int)
 
 }
