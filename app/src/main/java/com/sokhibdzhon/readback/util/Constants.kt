@@ -1,9 +1,4 @@
-package com.sokhibdzhon.readback.data.repository
-
-import com.sokhibdzhon.readback.data.Resource
-import com.sokhibdzhon.readback.data.model.Word
-import com.sokhibdzhon.readback.util.enums.GameType
-import kotlinx.coroutines.flow.Flow
+package com.sokhibdzhon.readback.util
 
 
 /**     I ❤ Code:)
@@ -14,13 +9,12 @@ import kotlinx.coroutines.flow.Flow
 ╚═══════════════════════════════════════╝
  */
 
-interface GameRepo {
-    //Custom Game
-    fun getCustomGameWords(level: Int, type: GameType): Flow<Resource<MutableList<Word>>>
-
-    //SharedPref values
-    fun getLevel(): Int
-    fun getTimeLeft(type: GameType): Long
-    fun getSkips(type: GameType): Int
-
+class Constants {
+    companion object {
+        const val CUSTOM_SECONDS = "custom_seconds"
+        const val CUSTOM_SKIPS = "custom_skips"
+        const val LEVEL_SECONDS = "level_seconds"
+        const val LEVEL_SKIPS = "level_skips"
+        const val LEVEL = "level"
+    }
 }

@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sokhibdzhon.readback.data.repository.GameRepoImpl
+import com.sokhibdzhon.readback.util.enums.GameType
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -19,7 +20,7 @@ class StartViewModel @Inject constructor(gameRepoImpl: GameRepoImpl) : ViewModel
 
     init {
         viewModelScope.launch {
-            _levelSkips.value = gameRepoImpl.getLevelSkips()
+            _levelSkips.value = gameRepoImpl.getSkips(GameType.LEVELSGAME)
             _level.value = gameRepoImpl.getLevel()
         }
 

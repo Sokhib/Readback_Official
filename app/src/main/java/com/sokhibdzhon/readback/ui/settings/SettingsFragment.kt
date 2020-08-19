@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import com.sokhibdzhon.readback.BaseApplication
 import com.sokhibdzhon.readback.R
 import com.sokhibdzhon.readback.databinding.FragmentSettingsBinding
+import com.sokhibdzhon.readback.util.Constants
 import com.sokhibdzhon.readback.util.enums.GameType
 import com.xw.repo.BubbleSeekBar
 import javax.inject.Inject
@@ -33,8 +34,8 @@ class SettingsFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_settings, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
 
-        timeSeekbar = sharedPrefEditor.getInt(getString(R.string.sharedpref_seconds), 15)
-        skipsSeekbar = sharedPrefEditor.getInt(getString(R.string.sharedpref_skips), 0)
+        timeSeekbar = sharedPrefEditor.getInt(Constants.CUSTOM_SECONDS, 15)
+        skipsSeekbar = sharedPrefEditor.getInt(Constants.CUSTOM_SKIPS, 0)
 
         binding.textviewTime.text = getString(R.string.seconds, timeSeekbar)
         binding.textviewSkips.text = getString(R.string.skips, skipsSeekbar)
@@ -53,9 +54,9 @@ class SettingsFragment : Fragment() {
             findNavController().popBackStack()
         }
         binding.textviewStartCustomGame.setOnClickListener {
-            sharedPrefEditor.edit().putInt(getString(R.string.sharedpref_seconds), timeSeekbar)
+            sharedPrefEditor.edit().putInt(Constants.CUSTOM_SECONDS, timeSeekbar)
                 .apply()
-            sharedPrefEditor.edit().putInt(getString(R.string.sharedpref_skips), skipsSeekbar)
+            sharedPrefEditor.edit().putInt(Constants.CUSTOM_SKIPS, skipsSeekbar)
                 .apply()
 
             val direction =

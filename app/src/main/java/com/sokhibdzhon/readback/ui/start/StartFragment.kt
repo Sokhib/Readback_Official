@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.ads.AdRequest
+import com.google.android.material.snackbar.Snackbar
 import com.sokhibdzhon.readback.BaseApplication
 import com.sokhibdzhon.readback.R
 import com.sokhibdzhon.readback.databinding.StartFragmentBinding
@@ -63,6 +64,13 @@ class StartFragment : Fragment() {
         }
         binding.imageviewSettings.setOnClickListener {
             navigate(NavigationType.STARTSETTINGS)
+        }
+        binding.imageviewSkips.setOnClickListener {
+            Snackbar.make(
+                it,
+                "${binding.textviewLevelSkips.text} skips left",
+                Snackbar.LENGTH_SHORT
+            ).show()
         }
 
     }

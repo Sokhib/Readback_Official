@@ -4,6 +4,7 @@ import android.content.SharedPreferences
 import com.sokhibdzhon.readback.data.Resource
 import com.sokhibdzhon.readback.data.model.Word
 import com.sokhibdzhon.readback.data.network.custom.CustomGameDataSource
+import com.sokhibdzhon.readback.util.Constants
 import com.sokhibdzhon.readback.util.enums.GameType
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -22,14 +23,6 @@ class GameRepoImpl @Inject constructor(
     private val sharedPref: SharedPreferences
 ) :
     GameRepo {
-    companion object {
-        private const val LEVELSKIPS = "levelSkips"
-        private const val LEVEL = "level"
-        private const val SECONDS = "seconds"
-        private const val SKIPS = "skips"
-
-
-    }
 
     override fun getCustomGameWords(level: Int, type: GameType): Flow<Resource<MutableList<Word>>> {
         return if (type == GameType.CUSTOMGAME)
@@ -39,10 +32,19 @@ class GameRepoImpl @Inject constructor(
         }
     }
 
-    override fun getLevelSkips(): Int = sharedPref.getInt(LEVELSKIPS, 1)
-    override fun getLevel(): Int = sharedPref.getInt(LEVEL, 1)
-    override fun getTimeLeft(): Long = sharedPref.getInt(SECONDS, 15).toLong()
-    override fun getCustomSkips(): Int = sharedPref.getInt(SKIPS, 1)
+    override fun getLevel(): Int = sharedPref.getInt(Constants.LEVEL, 1)
+    override fun getTimeLeft(type: GameType): Long =
+        when (type) {
+            GameType.CUSTOMGAME -> sharedPref.getInt(Constants.CUSTOM_SECONDS, 15).toLong()
+            GameType.LEVELSGAME -> sharedPref.getInt(Constants.LEVEL_SECONDS, 30).toLong()
+        }
 
+
+    override
+    fun getSkips(type: GameType): Int =
+        when (type) {
+            GameType.CUSTOMGAME -> sharedPref.getInt(Constants.CUSTOM_SKIPS, 1)
+            GameType.LEVELSGAME -> sharedPref.getInt(Constants.LEVEL_SKIPS, 5)
+        }
 }
 

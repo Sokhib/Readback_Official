@@ -29,7 +29,6 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
-//TODO: Skip edince +1 puan eklensin
 class GameFragment : Fragment(), View.OnClickListener {
 
     private lateinit var viewModel: GameViewModel
@@ -63,6 +62,8 @@ class GameFragment : Fragment(), View.OnClickListener {
         )
         lifecycleScope.launchWhenCreated {
             viewModel.setType(args.type)
+            viewModel.getTimeLeftByType(args.type)
+            viewModel.getSkipByType(args.type)
             viewModel.getWords(args.level, args.type)
         }
         return binding.root

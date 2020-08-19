@@ -66,11 +66,6 @@ class GameViewModel @Inject constructor(
         _correct.value = false
         _gameFinish.value = false
         _score.value = 0
-        viewModelScope.launch {
-            _timeLeft.value = gameRepoImpl.getTimeLeft()
-            _skipNumber.value = gameRepoImpl.getCustomSkips()
-        }
-        prepareTimer()
     }
 
     fun getWords(level: Int, type: GameType) {
@@ -149,6 +144,19 @@ class GameViewModel @Inject constructor(
     }
 
     fun getSkipNumber() = skipNumber.value
+
+    fun getTimeLeftByType(type: GameType) {
+        viewModelScope.launch {
+            _timeLeft.value = gameRepoImpl.getTimeLeft(type)
+            prepareTimer()
+        }
+    }
+
+    fun getSkipByType(type: GameType) {
+        viewModelScope.launch {
+            _skipNumber.value = gameRepoImpl.getSkips(type)
+        }
+    }
 
     override fun onCleared() {
         super.onCleared()
