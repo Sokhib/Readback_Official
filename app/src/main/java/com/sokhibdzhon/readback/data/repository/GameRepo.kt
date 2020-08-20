@@ -22,6 +22,7 @@ interface GameRepo {
     fun getTimeLeft(type: GameType): Long
     fun getSkips(type: GameType): Int
     fun updateBestScore(bestScore: Int)
+    fun updateLevel()
     val bestScore: Int
     val level: Int
 }

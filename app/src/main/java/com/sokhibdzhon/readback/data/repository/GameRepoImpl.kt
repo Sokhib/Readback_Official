@@ -7,6 +7,7 @@ import com.sokhibdzhon.readback.data.network.custom.CustomGameDataSource
 import com.sokhibdzhon.readback.util.Constants
 import com.sokhibdzhon.readback.util.enums.GameType
 import kotlinx.coroutines.flow.Flow
+import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -47,6 +48,11 @@ class GameRepoImpl @Inject constructor(
 
     override fun updateBestScore(bestScore: Int) {
         sharedPref.edit().putInt(Constants.BEST_SCORE, bestScore).apply()
+    }
+
+    override fun updateLevel() {
+        sharedPref.edit().putInt(Constants.LEVEL, sharedPref.getInt(Constants.LEVEL, 1) + 1).apply()
+        Timber.d("Level is in sharedPref: ${sharedPref.getInt(Constants.LEVEL, 1)}")
     }
 
     override val bestScore: Int
