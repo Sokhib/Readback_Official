@@ -29,6 +29,7 @@ class AppModule {
         )
     }
 
+    @Singleton
     @Provides
     fun provideAdRequest(): AdRequest = AdRequest.Builder().build()
 

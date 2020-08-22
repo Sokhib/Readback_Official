@@ -83,12 +83,7 @@ class GameFragment : Fragment(), View.OnClickListener {
         }
         rewardedAd.loadAd(adRequest, object : RewardedAdLoadCallback() {
             override fun onRewardedAdFailedToLoad(adError: LoadAdError) {
-                Snackbar.make(
-                    requireView(),
-                    adError.message,
-                    Snackbar.LENGTH_SHORT
-                )
-                    .show()
+                Timber.d("Message: ${adError.message}\n Cause: ${adError.cause} \n Domain: ${adError.domain}")
             }
         })
         return binding.root
