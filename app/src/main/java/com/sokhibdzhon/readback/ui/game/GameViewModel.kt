@@ -33,8 +33,12 @@ class GameViewModel @Inject constructor(
         get() = _wordList
 
     private val _correct = MutableLiveData<Boolean>()
-    val correct: LiveData<Boolean>
+    private val correct: LiveData<Boolean>
         get() = _correct
+
+    private val _isWatchedAd = MutableLiveData<Boolean>(false)
+    private val isWatchedAd: LiveData<Boolean>
+        get() = _isWatchedAd
 
     private val _gameFinish = MutableLiveData<Boolean>()
     val gameFinish: LiveData<Boolean>
@@ -157,6 +161,31 @@ class GameViewModel @Inject constructor(
             _skipNumber.value = gameRepoImpl.getSkips(type)
         }
     }
+
+    fun updateAdWatch() {
+        _isWatchedAd.value = true
+    }
+
+    fun getAdWatched() = isWatchedAd.value
+
+    fun pauseTimer() {
+        timer.cancel()
+    }
+
+    fun startTimer() {
+        addTime()
+        prepareTimer()
+        timer.start()
+    }
+
+    fun setCorrectness(isCorrect: Boolean) {
+        _correct.value = isCorrect
+    }
+
+    private fun addTime() {
+        _timeLeft.value = _timeLeft.value?.plus(15L)
+    }
+
 
     override fun onCleared() {
         super.onCleared()

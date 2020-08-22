@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.rewarded.RewardedAd
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -28,7 +29,10 @@ class AppModule {
         )
     }
 
-    @Singleton
     @Provides
     fun provideAdRequest(): AdRequest = AdRequest.Builder().build()
+
+    @Provides
+    fun provideRewardedAd(context: Context): RewardedAd =
+        RewardedAd(context, "ca-app-pub-3940256099942544/5224354917")
 }

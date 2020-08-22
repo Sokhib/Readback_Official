@@ -7,15 +7,24 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.get
+import com.google.android.gms.ads.AdError
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.rewarded.RewardItem
+import com.google.android.gms.ads.rewarded.RewardedAd
+import com.google.android.gms.ads.rewarded.RewardedAdCallback
+import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 import com.google.android.material.snackbar.Snackbar
 import com.sokhibdzhon.readback.BaseApplication
 import com.sokhibdzhon.readback.R
@@ -33,6 +42,12 @@ class GameFragment : Fragment(), View.OnClickListener {
 
     private lateinit var viewModel: GameViewModel
     private lateinit var binding: GameFragmentBinding
+
+    @Inject
+    lateinit var rewardedAd: RewardedAd
+
+    @Inject
+    lateinit var adRequest: AdRequest
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -66,6 +81,16 @@ class GameFragment : Fragment(), View.OnClickListener {
             viewModel.getSkipByType(args.type)
             viewModel.getWords(args.level, args.type)
         }
+        rewardedAd.loadAd(adRequest, object : RewardedAdLoadCallback() {
+            override fun onRewardedAdFailedToLoad(adError: LoadAdError) {
+                Snackbar.make(
+                    requireView(),
+                    adError.message,
+                    Snackbar.LENGTH_SHORT
+                )
+                    .show()
+            }
+        })
         return binding.root
     }
 
@@ -95,9 +120,10 @@ class GameFragment : Fragment(), View.OnClickListener {
                                 .show()
                             binding.skip.setOnClickListener(null)
                         } else {
-                            viewModel.nextWord()
-                            viewModel.minusSkip()
+                            viewModel.setCorrectness(true)
                             viewModel.updateScore(1)
+                            viewModel.minusSkip()
+                            viewModel.nextWord()
                             startAnimation()
                         }
                     }
@@ -131,40 +157,131 @@ class GameFragment : Fragment(), View.OnClickListener {
         setOptionBackground(v, isCorrect)
         //set game finish
         if (!isCorrect) viewModel.setGameFinish(true)
+        else {
+            getNextWord()
+        }
+
+    }
+
+    //Functions
+    private fun clearOptionsBackground() {
+        options.forEach { option ->
+            option.background = ResourcesCompat.getDrawable(
+                resources,
+                R.drawable.round_white_background,
+                requireContext().theme
+            )
+        }
+    }
+
+    private fun getNextWord() {
         lifecycleScope.launch {
             coroutineScope {
                 delay(500)
-                options.forEach { option ->
-                    option.background = ResourcesCompat.getDrawable(
-                        resources,
-                        R.drawable.round_white_background,
-                        requireContext().theme
-                    )
-                }
-
+                clearOptionsBackground()
                 viewModel.nextWord()
                 startAnimation()
                 isActiveOptions(true)
             }
+
         }
+
     }
 
-    //Functions
     private fun gameFinished() {
-        val action = if (args.type == GameType.CUSTOMGAME)
-            GameFragmentDirections.actionGameFragmentToScoreFragment(viewModel.score.value ?: 0)
-        else {
+        val action: NavDirections
+        if (args.type == GameType.CUSTOMGAME) {
+            action =
+                GameFragmentDirections.actionGameFragmentToScoreFragment(viewModel.score.value ?: 0)
+            with(findNavController()) {
+                if (currentDestination != graph[R.id.scoreFragment] || currentDestination != graph[R.id.levelScoreFragment]) {
+                    navigate(action)
+                }
+            }
+        } else {
             if (viewModel.isCorrect()!!) {
                 Timber.d("isCorrect in Main Game Finish: $isCorrect")
                 Timber.d("viewModel.isCorrect() in Main Game Finish: ${viewModel.isCorrect()}")
-                GameFragmentDirections.actionGameFragmentToLevelScoreFragment(LevelResult.SUCCESS)
-            } else GameFragmentDirections.actionGameFragmentToLevelScoreFragment(LevelResult.FAIL)
-        }
-        with(findNavController()) {
-            if (currentDestination != graph[R.id.scoreFragment] || currentDestination != graph[R.id.levelScoreFragment]) {
-                navigate(action)
+                action =
+                    GameFragmentDirections.actionGameFragmentToLevelScoreFragment(LevelResult.SUCCESS)
+                with(findNavController()) {
+                    if (currentDestination != graph[R.id.scoreFragment] || currentDestination != graph[R.id.levelScoreFragment]) {
+                        navigate(action)
+                    }
+                }
+            } else {
+                viewModel.pauseTimer()
+                if (viewModel.getAdWatched()!!) {
+                    navigateToFail()
+                } else {
+                    viewModel.updateAdWatch()
+                    AlertDialog.Builder(requireActivity())
+                        .setTitle("Continue...")
+                        .setMessage("Do You Want to Watch Ad to Continue?")
+                        .setPositiveButton("YES") { dialog, _ ->
+                            Timber.d("CONFIRM")
+                            if (rewardedAd.isLoaded) {
+                                rewardedAd.show(
+                                    requireActivity(),
+                                    object : RewardedAdCallback() {
+                                        var rewardEarned = false
+                                        override fun onRewardedAdFailedToShow(p0: AdError?) {
+                                            super.onRewardedAdFailedToShow(p0)
+                                            Snackbar.make(
+                                                requireView(),
+                                                "Sorry, Ad Failed to Show ${p0?.message}",
+                                                Snackbar.LENGTH_SHORT
+                                            ).show()
+                                            navigateToFail()
+                                        }
+
+                                        override fun onRewardedAdClosed() {
+                                            super.onRewardedAdClosed()
+                                            if (!rewardEarned) {
+                                                Snackbar.make(
+                                                    requireView(),
+                                                    "Sorry, You Closed Ad.",
+                                                    Snackbar.LENGTH_SHORT
+                                                ).show()
+                                                navigateToFail()
+                                            } else {
+                                                viewModel.updateScore(1)
+                                                clearOptionsBackground()
+                                                isActiveOptions(true)
+                                                viewModel.startTimer()
+                                            }
+                                        }
+
+                                        override fun onUserEarnedReward(p0: RewardItem) {
+                                            rewardEarned = true
+                                            clearOptionsBackground()
+                                            isActiveOptions(true)
+                                            viewModel.startTimer()
+                                        }
+                                    })
+                            } else {
+                                Snackbar.make(
+                                    requireView(),
+                                    "Failed to Load Ad",
+                                    Snackbar.LENGTH_SHORT
+                                ).show()
+                                navigateToFail()
+                            }
+
+                            dialog.dismiss()
+                            dialog.cancel()
+                        }
+                        .setNegativeButton("NO") { dialog, _ ->
+                            dialog.dismiss()
+                            dialog.cancel()
+                            navigateToFail()
+                        }
+                        .setCancelable(false)
+                        .create().show()
+                }
             }
         }
+
     }
 
     private fun setOptionBackground(v: View, isCorrect: Boolean) {
@@ -202,6 +319,18 @@ class GameFragment : Fragment(), View.OnClickListener {
         with(binding.motionLayout) {
             setTransition(R.id.start, R.id.end)
             transitionToEnd()
+        }
+    }
+
+    private fun navigateToFail() {
+        val direction =
+            GameFragmentDirections.actionGameFragmentToLevelScoreFragment(
+                LevelResult.FAIL
+            )
+        with(findNavController()) {
+            if (currentDestination != graph[R.id.scoreFragment] || currentDestination != graph[R.id.levelScoreFragment]) {
+                navigate(direction)
+            }
         }
     }
 }

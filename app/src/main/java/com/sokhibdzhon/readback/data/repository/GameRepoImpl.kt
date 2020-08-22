@@ -43,7 +43,7 @@ class GameRepoImpl @Inject constructor(
     fun getSkips(type: GameType): Int =
         when (type) {
             GameType.CUSTOMGAME -> sharedPref.getInt(Constants.CUSTOM_SKIPS, 1)
-            GameType.LEVELSGAME -> sharedPref.getInt(Constants.LEVEL_SKIPS, 5)
+            GameType.LEVELSGAME -> sharedPref.getInt(Constants.LEVEL_SKIPS, 3)
         }
 
     override fun updateBestScore(bestScore: Int) {
