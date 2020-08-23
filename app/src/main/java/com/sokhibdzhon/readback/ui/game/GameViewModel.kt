@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sokhibdzhon.readback.data.Resource
-import com.sokhibdzhon.readback.data.Status
 import com.sokhibdzhon.readback.data.model.Word
 import com.sokhibdzhon.readback.data.repository.GameRepoImpl
 import com.sokhibdzhon.readback.util.enums.GameType
@@ -76,11 +75,7 @@ class GameViewModel @Inject constructor(
         gameRepoImpl.getCustomGameWords(level, type)
             .onEach {
                 Timber.d("${it.status}")
-                if (it.status == Status.SUCCESS) {
-                    _wordList.value = it
-                    Timber.d("Sizein ViewModel: ${it.data?.size}")
-                    timer.start()
-                }
+                _wordList.value = it
             }.launchIn(viewModelScope)
     }
 
@@ -172,9 +167,13 @@ class GameViewModel @Inject constructor(
         timer.cancel()
     }
 
-    fun startTimer() {
+    fun addTimeAndStartTimer() {
         addTime()
         prepareTimer()
+        startTimer()
+    }
+
+    fun startTimer() {
         timer.start()
     }
 

@@ -100,6 +100,7 @@ class GameFragment : Fragment(), View.OnClickListener {
         viewModel.wordList.observe(viewLifecycleOwner, Observer { words ->
             when (words.status) {
                 Status.SUCCESS -> {
+                    viewModel.startTimer()
                     binding.size = words.data?.size
                     options.forEach { option ->
                         option.setOnClickListener(this)
@@ -121,6 +122,7 @@ class GameFragment : Fragment(), View.OnClickListener {
                     startAnimation()
                 }
                 Status.ERROR -> {
+                    binding.progressWordLoad.visibility = View.INVISIBLE
                     Toast.makeText(
                         requireActivity(),
                         "No Words or Check Internet Connection",
@@ -251,7 +253,7 @@ class GameFragment : Fragment(), View.OnClickListener {
                                             viewModel.updateScore(1)
                                             clearOptionsBackground()
                                             isActiveOptions(true)
-                                            viewModel.startTimer()
+                                            viewModel.addTimeAndStartTimer()
                                         }
                                     }
 
@@ -259,7 +261,7 @@ class GameFragment : Fragment(), View.OnClickListener {
                                         rewardEarned = true
                                         clearOptionsBackground()
                                         isActiveOptions(true)
-                                        viewModel.startTimer()
+                                        viewModel.addTimeAndStartTimer()
                                     }
                                 })
                         } else {
