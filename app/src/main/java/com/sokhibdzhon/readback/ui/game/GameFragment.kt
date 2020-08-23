@@ -81,11 +81,6 @@ class GameFragment : Fragment(), View.OnClickListener {
             viewModel.getSkipByType(args.type)
             viewModel.getWords(args.level, args.type)
         }
-        rewardedAd.loadAd(adRequest, object : RewardedAdLoadCallback() {
-            override fun onRewardedAdFailedToLoad(adError: LoadAdError) {
-                Timber.d("Message: ${adError.message}\n Cause: ${adError.cause} \n Domain: ${adError.domain}")
-            }
-        })
         return binding.root
     }
 
@@ -210,73 +205,94 @@ class GameFragment : Fragment(), View.OnClickListener {
                     navigateToFail()
                 } else {
                     viewModel.updateAdWatch()
-                    AlertDialog.Builder(requireActivity())
-                        .setTitle("Continue...")
-                        .setMessage("Do You Want to Watch Ad to Continue?")
-                        .setPositiveButton("YES") { dialog, _ ->
-                            Timber.d("CONFIRM")
-                            if (rewardedAd.isLoaded) {
-                                rewardedAd.show(
-                                    requireActivity(),
-                                    object : RewardedAdCallback() {
-                                        var rewardEarned = false
-                                        override fun onRewardedAdFailedToShow(p0: AdError?) {
-                                            super.onRewardedAdFailedToShow(p0)
-                                            Snackbar.make(
-                                                requireView(),
-                                                "Sorry, Ad Failed to Show ${p0?.message}",
-                                                Snackbar.LENGTH_SHORT
-                                            ).show()
-                                            navigateToFail()
-                                        }
-
-                                        override fun onRewardedAdClosed() {
-                                            super.onRewardedAdClosed()
-                                            if (!rewardEarned) {
-                                                Snackbar.make(
-                                                    requireView(),
-                                                    "Sorry, You Closed Ad.",
-                                                    Snackbar.LENGTH_SHORT
-                                                ).show()
-                                                navigateToFail()
-                                            } else {
-                                                viewModel.updateScore(1)
-                                                clearOptionsBackground()
-                                                isActiveOptions(true)
-                                                viewModel.startTimer()
-                                            }
-                                        }
-
-                                        override fun onUserEarnedReward(p0: RewardItem) {
-                                            rewardEarned = true
-                                            clearOptionsBackground()
-                                            isActiveOptions(true)
-                                            viewModel.startTimer()
-                                        }
-                                    })
-                            } else {
-                                Snackbar.make(
-                                    requireView(),
-                                    "Failed to Load Ad",
-                                    Snackbar.LENGTH_SHORT
-                                ).show()
-                                navigateToFail()
-                            }
-
-                            dialog.dismiss()
-                            dialog.cancel()
-                        }
-                        .setNegativeButton("NO") { dialog, _ ->
-                            dialog.dismiss()
-                            dialog.cancel()
-                            navigateToFail()
-                        }
-                        .setCancelable(false)
-                        .create().show()
+                    showAlertDialog()
                 }
             }
         }
 
+    }
+
+    private fun showAlertDialog() {
+        AlertDialog.Builder(requireActivity())
+            .setTitle("Continue...")
+            .setMessage("Do You Want to Watch Ad to Continue?")
+            .setPositiveButton("YES") { dialog, _ ->
+                Timber.d("CONFIRM")
+                binding.progressWordLoad.visibility = View.VISIBLE
+                rewardedAd.loadAd(adRequest, object : RewardedAdLoadCallback() {
+                    override fun onRewardedAdLoaded() {
+                        super.onRewardedAdLoaded()
+                        binding.progressWordLoad.visibility = View.INVISIBLE
+                        if (rewardedAd.isLoaded) {
+                            rewardedAd.show(
+                                requireActivity(),
+                                object : RewardedAdCallback() {
+                                    var rewardEarned = false
+                                    override fun onRewardedAdFailedToShow(p0: AdError?) {
+                                        super.onRewardedAdFailedToShow(p0)
+                                        Snackbar.make(
+                                            requireView(),
+                                            "Sorry, Ad Failed to Show ${p0?.message}",
+                                            Snackbar.LENGTH_SHORT
+                                        ).show()
+                                        navigateToFail()
+                                    }
+
+                                    override fun onRewardedAdClosed() {
+                                        super.onRewardedAdClosed()
+                                        if (!rewardEarned) {
+                                            Snackbar.make(
+                                                requireView(),
+                                                "Sorry, You Closed Ad.",
+                                                Snackbar.LENGTH_SHORT
+                                            ).show()
+                                            navigateToFail()
+                                        } else {
+                                            viewModel.updateScore(1)
+                                            clearOptionsBackground()
+                                            isActiveOptions(true)
+                                            viewModel.startTimer()
+                                        }
+                                    }
+
+                                    override fun onUserEarnedReward(p0: RewardItem) {
+                                        rewardEarned = true
+                                        clearOptionsBackground()
+                                        isActiveOptions(true)
+                                        viewModel.startTimer()
+                                    }
+                                })
+                        } else {
+                            Snackbar.make(
+                                requireView(),
+                                "Failed to Load Ad",
+                                Snackbar.LENGTH_SHORT
+                            ).show()
+                            navigateToFail()
+                        }
+                    }
+
+                    override fun onRewardedAdFailedToLoad(adError: LoadAdError) {
+                        binding.progressWordLoad.visibility = View.INVISIBLE
+                        Snackbar.make(
+                            requireView(),
+                            "Failed to Load Ad",
+                            Snackbar.LENGTH_SHORT
+                        ).show()
+                        navigateToFail()
+                        Timber.d("Message: ${adError.message}\n Cause: ${adError.cause} \n Domain: ${adError.domain}")
+                    }
+                })
+                dialog.dismiss()
+                dialog.cancel()
+            }
+            .setNegativeButton("NO") { dialog, _ ->
+                dialog.dismiss()
+                dialog.cancel()
+                navigateToFail()
+            }
+            .setCancelable(false)
+            .create().show()
     }
 
     private fun setOptionBackground(v: View, isCorrect: Boolean) {
