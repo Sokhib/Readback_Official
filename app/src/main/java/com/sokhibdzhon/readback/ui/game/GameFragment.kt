@@ -94,6 +94,9 @@ class GameFragment : Fragment(), View.OnClickListener {
         viewModel.timeLeft.observe(viewLifecycleOwner, Observer { timeLeft ->
             if (binding.circularTimeView.progressMax == Float.MAX_VALUE)
                 binding.circularTimeView.progressMax = timeLeft.toFloat()
+            else if (binding.circularTimeView.progressMax < timeLeft) {
+                binding.circularTimeView.progressMax = timeLeft.toFloat()
+            }
             binding.circularTimeView.setProgressWithAnimation(timeLeft.toFloat(), 1000)
         })
         //words
@@ -261,7 +264,6 @@ class GameFragment : Fragment(), View.OnClickListener {
                                         rewardEarned = true
                                         clearOptionsBackground()
                                         isActiveOptions(true)
-                                        viewModel.addTimeAndStartTimer()
                                     }
                                 })
                         } else {
