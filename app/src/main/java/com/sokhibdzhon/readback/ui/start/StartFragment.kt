@@ -17,6 +17,7 @@ import com.sokhibdzhon.readback.databinding.StartFragmentBinding
 import com.sokhibdzhon.readback.util.enums.GameType
 import com.sokhibdzhon.readback.util.enums.NavigationType
 import com.sokhibdzhon.readback.util.enums.navigate
+import timber.log.Timber
 import javax.inject.Inject
 
 //TODO: onSkips click Snackbar how many skips left.
@@ -73,6 +74,12 @@ class StartFragment : Fragment() {
             ).show()
         }
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Timber.d("OnResume called: ")
+        viewModel.getLevelFromRepo()
     }
 
 }

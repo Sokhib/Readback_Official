@@ -7,10 +7,11 @@ import androidx.lifecycle.viewModelScope
 import com.sokhibdzhon.readback.data.repository.GameRepoImpl
 import com.sokhibdzhon.readback.util.enums.GameType
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
-class StartViewModel @Inject constructor(gameRepoImpl: GameRepoImpl) : ViewModel() {
-    private val _levelSkips = MutableLiveData(0)
+class StartViewModel @Inject constructor(private val gameRepoImpl: GameRepoImpl) : ViewModel() {
+    private val _levelSkips = MutableLiveData(3)
     val levelSkips: LiveData<Int>
         get() = _levelSkips
 
@@ -20,11 +21,20 @@ class StartViewModel @Inject constructor(gameRepoImpl: GameRepoImpl) : ViewModel
 
     init {
         viewModelScope.launch {
-            _levelSkips.value = gameRepoImpl.getSkips(GameType.LEVELSGAME)
-            _level.value = gameRepoImpl.level
+            Timber.d("StartViewModel: Init Called ")
+//            getLevelSkipsFromRepo()
+            getLevelFromRepo()
         }
 
     }
 
     fun getLevel() = level.value
+
+    private fun getLevelSkipsFromRepo() {
+        _levelSkips.value = gameRepoImpl.getSkips(GameType.LEVELSGAME)
+    }
+
+    fun getLevelFromRepo() {
+        _level.value = gameRepoImpl.level
+    }
 }
