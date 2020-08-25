@@ -59,6 +59,15 @@ class GameFragment : Fragment(), View.OnClickListener {
     }
 
     private var options = listOf<TextView>()
+    private val backColors = listOf(
+        R.drawable.ic_word_background,
+        R.drawable.ic_word_background_1,
+        R.drawable.ic_word_background_2,
+        R.drawable.ic_word_background_3,
+        R.drawable.ic_word_background_4,
+        R.drawable.ic_word_background_5
+    )
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -69,6 +78,7 @@ class GameFragment : Fragment(), View.OnClickListener {
             lifecycleOwner = viewLifecycleOwner
             gmviewmodel = viewModel
         }
+
         options = listOf(
             binding.textOption1,
             binding.textOption2,
@@ -80,6 +90,7 @@ class GameFragment : Fragment(), View.OnClickListener {
             viewModel.getTimeLeftByType(args.type)
             viewModel.getSkipByType(args.type)
             viewModel.getWords(args.level, args.type)
+            binding.frameLayout.setBackgroundResource(backColors[args.level % 6])
         }
         return binding.root
     }

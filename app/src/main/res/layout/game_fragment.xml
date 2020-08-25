@@ -30,12 +30,12 @@
                 android:id="@+id/frameLayout"
                 android:layout_width="match_parent"
                 android:layout_height="350dp"
-                android:background="@drawable/ic_word_background"
                 android:gravity="center"
                 android:minHeight="300dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:background="@drawable/ic_word_background" />
 
             <LinearLayout
                 android:id="@+id/linearLayout"

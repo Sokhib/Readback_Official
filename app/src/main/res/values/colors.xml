@@ -23,4 +23,22 @@
     <color name="yellow_700">#FBC02D</color>
     <color name="green_500">#4CAF50</color>
     <color name="green_300">#81C784</color>
+
+    <!--    extra background colors-->
+    <color name="purple_900">#4A148C</color>
+    <color name="purple_200">#CE93D8</color>
+
+    <color name="brown_900">#3E2723</color>
+    <color name="brown_200">#BCAAA4</color>
+
+    <color name="orange_900">#E65100</color>
+    <color name="orange_200">#FFCC80</color>
+
+    <color name="green_900">#1B5E20</color>
+    <color name="green_200">#A5D6A7</color>
+
+    <color name="pink_900">#880E4F</color>
+    <color name="pink_200">#F48FB1</color>
+
+
 </resources>

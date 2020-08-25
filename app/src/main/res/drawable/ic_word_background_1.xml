@@ -8,10 +8,10 @@
     <path android:pathData="M0 693c40.387-8.336 80.173-18.244 121-24.576 58.603-9.089 117.874-13.796 177-16.385 31.144-1.363 62.927-0.439 94 0.922 8.321 0.364 16.678-0.286 25 0.078 23.36 1.023 46.779 3.431 70 5.79 35.362 3.593 70.983 6.958 106 13.481 33.18 6.181 65.961 13.871 99 20.69V20c0-4.705 1.235-11.597-1.318-15.786-2.501-4.104-7.419-4.191-11.682-4.213C670.334-0.044 661.666 0 653 0H13C8.976 0.008 4.629-0.174 1.894 3.344-1.086 7.177 0 13.46 0 18v675z">
         <aapt:attr name="android:fillColor">
             <gradient
-                android:endColor="@color/red_500"
+                android:endColor="@color/purple_900"
                 android:endX="0"
                 android:endY="500"
-                android:startColor="@color/yellow_900"
+                android:startColor="@color/purple_200"
                 android:startX="0"
                 android:startY="0"
                 android:type="linear"
