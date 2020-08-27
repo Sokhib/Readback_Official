@@ -12,6 +12,16 @@
     <string name="image_logo">image logo</string>
     <string name="seconds">%1$d seconds</string>
     <string name="skips">%1$d skips</string>
+    <string name="skips_left">%1$s skips left</string>
     <string name="settings_icon">settings</string>
     <string name="continue_game">CONTINUE</string>
+    <string name="no_skips_left">No Skips Left</string>
+    <string name="no_words_error">No Words or Check Internet Connection</string>
+    <string name="continue_alert">Continue…</string>
+    <string name="want_watch_ad">Do You Want to Watch Ad to Continue?</string>
+    <string name="yes">YES</string>
+    <string name="ad_failed">Sorry, Ad Failed to Show %1$s</string>
+    <string name="ad_close">Sorry, You Closed Ad.</string>
+    <string name="ad_load_failed">Failed to Load Ad</string>
+    <string name="no">NO</string>
 </resources>

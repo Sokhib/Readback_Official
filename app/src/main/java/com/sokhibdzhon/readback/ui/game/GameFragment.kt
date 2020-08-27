@@ -121,7 +121,11 @@ class GameFragment : Fragment(), View.OnClickListener {
                     }
                     binding.skip.setOnClickListener {
                         if (viewModel.getSkipNumber() == 0) {
-                            Snackbar.make(binding.root, "No Skips Left", Snackbar.LENGTH_SHORT)
+                            Snackbar.make(
+                                binding.root,
+                                getString(R.string.no_skips_left),
+                                Snackbar.LENGTH_SHORT
+                            )
                                 .show()
                             binding.skip.setOnClickListener(null)
                         } else {
@@ -139,7 +143,7 @@ class GameFragment : Fragment(), View.OnClickListener {
                     binding.progressWordLoad.visibility = View.INVISIBLE
                     Toast.makeText(
                         requireActivity(),
-                        "No Words or Check Internet Connection",
+                        getString(R.string.no_words_error),
                         Toast.LENGTH_SHORT
                     )
                         .show()
@@ -206,8 +210,6 @@ class GameFragment : Fragment(), View.OnClickListener {
             }
         } else {
             if (viewModel.isCorrect()!!) {
-                Timber.d("isCorrect in Main Game Finish: $isCorrect")
-                Timber.d("viewModel.isCorrect() in Main Game Finish: ${viewModel.isCorrect()}")
                 action =
                     GameFragmentDirections.actionGameFragmentToLevelScoreFragment(LevelResult.SUCCESS)
                 with(findNavController()) {
@@ -230,10 +232,9 @@ class GameFragment : Fragment(), View.OnClickListener {
 
     private fun showAlertDialog() {
         AlertDialog.Builder(requireActivity())
-            .setTitle("Continue...")
-            .setMessage("Do You Want to Watch Ad to Continue?")
-            .setPositiveButton("YES") { dialog, _ ->
-                Timber.d("CONFIRM")
+            .setTitle(getString(R.string.continue_alert))
+            .setMessage(getString(R.string.want_watch_ad))
+            .setPositiveButton(getString(R.string.yes)) { dialog, _ ->
                 binding.progressWordLoad.visibility = View.VISIBLE
                 rewardedAd.loadAd(adRequest, object : RewardedAdLoadCallback() {
                     override fun onRewardedAdLoaded() {
@@ -248,7 +249,7 @@ class GameFragment : Fragment(), View.OnClickListener {
                                         super.onRewardedAdFailedToShow(p0)
                                         Snackbar.make(
                                             requireView(),
-                                            "Sorry, Ad Failed to Show ${p0?.message}",
+                                            getString(R.string.ad_failed, p0?.message ?: ""),
                                             Snackbar.LENGTH_SHORT
                                         ).show()
                                         navigateToFail()
@@ -259,7 +260,7 @@ class GameFragment : Fragment(), View.OnClickListener {
                                         if (!rewardEarned) {
                                             Snackbar.make(
                                                 requireView(),
-                                                "Sorry, You Closed Ad.",
+                                                getString(R.string.ad_close),
                                                 Snackbar.LENGTH_SHORT
                                             ).show()
                                             navigateToFail()
@@ -280,7 +281,7 @@ class GameFragment : Fragment(), View.OnClickListener {
                         } else {
                             Snackbar.make(
                                 requireView(),
-                                "Failed to Load Ad",
+                                getString(R.string.ad_load_failed),
                                 Snackbar.LENGTH_SHORT
                             ).show()
                             navigateToFail()
@@ -291,7 +292,7 @@ class GameFragment : Fragment(), View.OnClickListener {
                         binding.progressWordLoad.visibility = View.INVISIBLE
                         Snackbar.make(
                             requireView(),
-                            "Failed to Load Ad",
+                            getString(R.string.ad_load_failed),
                             Snackbar.LENGTH_SHORT
                         ).show()
                         navigateToFail()
@@ -301,7 +302,7 @@ class GameFragment : Fragment(), View.OnClickListener {
                 dialog.dismiss()
                 dialog.cancel()
             }
-            .setNegativeButton("NO") { dialog, _ ->
+            .setNegativeButton(getString(R.string.no)) { dialog, _ ->
                 dialog.dismiss()
                 dialog.cancel()
                 navigateToFail()

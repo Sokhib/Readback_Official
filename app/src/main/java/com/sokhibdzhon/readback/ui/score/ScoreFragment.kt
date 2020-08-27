@@ -86,7 +86,7 @@ class ScoreFragment : Fragment() {
                 "Hey, I scored $bestScore points on Readback game. Can you beat my record?! Check out app:\n" +
                         "https://play.google.com/store/apps/details?id=${requireContext().packageName}"
             )
-        }, "Readback")
+        }, getString(R.string.app_name))
         startActivity(share)
     }
 

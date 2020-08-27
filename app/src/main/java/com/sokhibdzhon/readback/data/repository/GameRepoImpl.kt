@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.Flow
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.random.Random
 
 /**     I ❤ Code:)
 ╔═══════════════════════════════════════╗
@@ -43,7 +44,7 @@ class GameRepoImpl @Inject constructor(
     fun getSkips(type: GameType): Int =
         when (type) {
             GameType.CUSTOMGAME -> sharedPref.getInt(Constants.CUSTOM_SKIPS, 1)
-            GameType.LEVELSGAME -> sharedPref.getInt(Constants.LEVEL_SKIPS, 3)
+            GameType.LEVELSGAME -> Random.nextInt(1, 3)
         }
 
     override fun updateBestScore(bestScore: Int) {

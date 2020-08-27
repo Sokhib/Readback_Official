@@ -3,6 +3,7 @@ package com.sokhibdzhon.readback.data.network.custom
 import com.google.firebase.firestore.FirebaseFirestore
 import com.sokhibdzhon.readback.data.Resource
 import com.sokhibdzhon.readback.data.model.Word
+import com.sokhibdzhon.readback.data.network.custom.CustomGameDataSource.Companion.CUSTOM
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -55,7 +56,8 @@ class CustomGameDataSourceImpl @Inject constructor(private val firestore: Fireba
                             }
                         }
                         if (!words.isNullOrEmpty()) {
-                            words!!.shuffle()
+                            if (customOrLevel == CUSTOM)
+                                words!!.shuffle()
                             offer(Resource.success(words))
                         } else {
                             offer(Resource.error("No Words or Check Internet Connection"))
