@@ -20,4 +20,7 @@ class LevelScoreViewModel @Inject constructor(private val gameRepoImpl: GameRepo
             _isSaved.value = true
         }
     }
+
+    fun getLevel() = gameRepoImpl.level
+
 }

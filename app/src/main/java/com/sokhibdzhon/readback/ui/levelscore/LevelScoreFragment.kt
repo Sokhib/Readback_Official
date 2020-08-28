@@ -12,12 +12,15 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.gms.ads.AdRequest
+import com.google.android.material.snackbar.Snackbar
+import com.google.android.play.core.review.ReviewManager
 import com.sokhibdzhon.readback.BaseApplication
 import com.sokhibdzhon.readback.R
 import com.sokhibdzhon.readback.databinding.LevelScoreFragmentBinding
 import com.sokhibdzhon.readback.util.enums.LevelResult
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import timber.log.Timber
 import javax.inject.Inject
 
 class LevelScoreFragment : Fragment() {
@@ -33,6 +36,9 @@ class LevelScoreFragment : Fragment() {
     @Inject
     lateinit var adRequest: AdRequest
 
+    @Inject
+    lateinit var reviewManager: ReviewManager
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         (requireActivity().applicationContext as BaseApplication).appGraph.inject(this)
@@ -47,6 +53,12 @@ class LevelScoreFragment : Fragment() {
         levelResult = args.result
         if (levelResult == LevelResult.SUCCESS) {
             binding.animationViewLottie.setAnimation(R.raw.partypopper)
+            Timber.d("${viewModel.getLevel()}")
+            if (viewModel.getLevel() == 10) {
+                Timber.d("Place to show review... ")
+                initReview()
+            }
+
         } else {
             binding.animationViewLottie.setAnimation(R.raw.failedattempt)
         }
@@ -71,5 +83,27 @@ class LevelScoreFragment : Fragment() {
 
     }
 
+    private fun initReview() {
+        reviewManager.requestReviewFlow().addOnCompleteListener { request ->
+            if (request.isSuccessful) {
+                Timber.d("Review request  SUCCESSFUL")
+                reviewManager.launchReviewFlow(requireActivity(), request.result)
+                    .addOnFailureListener {
+                        Snackbar.make(requireView(), "Review Not Successful", Snackbar.LENGTH_SHORT)
+                            .show()
+                    }
+                    .addOnCompleteListener {
+                        Snackbar.make(
+                            requireView(),
+                            "Thanks for the Review.",
+                            Snackbar.LENGTH_SHORT
+                        )
+                            .show()
+                    }
+            } else {
+                Timber.d("Review Request Not Successful")
+            }
+        }
+    }
 
 }
