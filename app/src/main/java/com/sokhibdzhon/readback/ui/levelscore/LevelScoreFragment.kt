@@ -13,7 +13,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.gms.ads.AdRequest
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.play.core.review.ReviewManager
+import com.google.android.play.core.review.ReviewManagerFactory
 import com.sokhibdzhon.readback.BaseApplication
 import com.sokhibdzhon.readback.R
 import com.sokhibdzhon.readback.databinding.LevelScoreFragmentBinding
@@ -36,8 +36,7 @@ class LevelScoreFragment : Fragment() {
     @Inject
     lateinit var adRequest: AdRequest
 
-    @Inject
-    lateinit var reviewManager: ReviewManager
+    private val reviewManager by lazy { ReviewManagerFactory.create(requireActivity()) }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
