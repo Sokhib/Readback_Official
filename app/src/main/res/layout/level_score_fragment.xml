@@ -3,11 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
-
-    </data>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/ic_score_background"
@@ -16,14 +12,11 @@
         <com.google.android.gms.ads.AdView
             android:id="@+id/adViewScore"
             android:layout_width="wrap_content"
+            android:layout_gravity="top|center"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/size_8dp"
+            android:layout_marginTop="@dimen/size_24dp"
             app:adSize="BANNER"
-            app:adUnitId="ca-app-pub-3940256099942544/6300978111"
-            app:layout_constraintBottom_toTopOf="@+id/animationViewLottie"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:adUnitId="ca-app-pub-3940256099942544/6300978111" />
 
 
         <com.airbnb.lottie.LottieAnimationView
@@ -34,12 +27,9 @@
             android:layout_marginTop="112dp"
             android:elevation="@dimen/size_16dp"
             android:gravity="center"
+            android:layout_gravity="center_horizontal"
             android:minHeight="400dp"
             android:padding="@dimen/size_24dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.521"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             app:lottie_autoPlay="true"
             app:lottie_loop="true" />
 
@@ -53,14 +43,11 @@
             android:layout_marginBottom="24dp"
             android:background="@drawable/round_gradient_text_background"
             android:gravity="center"
+            android:layout_gravity="bottom"
             android:padding="@dimen/size_16dp"
-            android:text="@string/continue_game"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.666"
-            app:layout_constraintStart_toStartOf="parent">
+            android:text="@string/continue_game">
 
         </TextView>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </FrameLayout>
 </layout>
