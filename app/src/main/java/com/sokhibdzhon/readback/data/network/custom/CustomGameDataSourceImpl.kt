@@ -4,6 +4,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.sokhibdzhon.readback.data.Resource
 import com.sokhibdzhon.readback.data.model.Word
 import com.sokhibdzhon.readback.data.network.custom.CustomGameDataSource.Companion.CUSTOM
+import com.sokhibdzhon.readback.util.Options
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -37,8 +38,8 @@ class CustomGameDataSourceImpl @Inject constructor(private val firestore: Fireba
                     querySnapshot?.let { document ->
                         for (currentWord in document.documents) {
                             val options =
-                                (currentWord.get("options") as MutableList<String>?)?.let {
-                                    currentWord.get("options") as MutableList<String>
+                                (currentWord.get("options") as Options?)?.let {
+                                    currentWord.get("options") as Options
                                 } ?: mutableListOf("", "", "", "")
                             options.shuffle()
                             val correct =
