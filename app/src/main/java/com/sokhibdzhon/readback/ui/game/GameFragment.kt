@@ -1,6 +1,7 @@
 package com.sokhibdzhon.readback.ui.game
 
 import android.content.Context
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -53,6 +54,10 @@ class GameFragment : Fragment(), View.OnClickListener {
     lateinit var viewModelFactory: ViewModelProvider.Factory
     private val args: GameFragmentArgs by navArgs()
     private var isCorrect = false
+
+    //Maybe get this by di?
+    private val mpIncorrect by lazy { MediaPlayer.create(requireContext(), R.raw.wrong) }
+    private val mpCorrect by lazy { MediaPlayer.create(requireContext(), R.raw.correct) }
     override fun onAttach(context: Context) {
         super.onAttach(context)
         (requireActivity().applicationContext as BaseApplication).appGraph.inject(this)
@@ -166,9 +171,12 @@ class GameFragment : Fragment(), View.OnClickListener {
         isCorrect = viewModel.checkForCorrectness((v as TextView).text.toString())
         setOptionBackground(v, isCorrect)
         //set game finish
-        if (!isCorrect) viewModel.setGameFinish(true)
-        else {
+        if (!isCorrect) {
+            viewModel.setGameFinish(true)
+            mpIncorrect.start()
+        } else {
             getNextWord()
+            mpCorrect.start()
         }
 
     }
@@ -359,5 +367,13 @@ class GameFragment : Fragment(), View.OnClickListener {
                 navigate(direction)
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mpCorrect.stop()
+        mpCorrect.release()
+        mpIncorrect.stop()
+        mpIncorrect.release()
     }
 }

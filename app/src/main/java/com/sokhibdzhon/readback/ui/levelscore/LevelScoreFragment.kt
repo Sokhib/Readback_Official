@@ -1,6 +1,7 @@
 package com.sokhibdzhon.readback.ui.levelscore
 
 import android.content.Context
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -37,6 +38,8 @@ class LevelScoreFragment : Fragment() {
     lateinit var adRequest: AdRequest
 
     private val reviewManager by lazy { ReviewManagerFactory.create(requireActivity()) }
+    private val mpLevelFail by lazy { MediaPlayer.create(requireContext(), R.raw.failfare) }
+    private val mpLevelPass by lazy { MediaPlayer.create(requireContext(), R.raw.goodresult) }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -52,6 +55,7 @@ class LevelScoreFragment : Fragment() {
         levelResult = args.result
         if (levelResult == LevelResult.SUCCESS) {
             binding.animationViewLottie.setAnimation(R.raw.partypopper)
+            mpLevelPass.start()
             Timber.d("${viewModel.getLevel()}")
             if (viewModel.getLevel() == 10) {
                 Timber.d("Place to show review... ")
@@ -60,6 +64,7 @@ class LevelScoreFragment : Fragment() {
 
         } else {
             binding.animationViewLottie.setAnimation(R.raw.failedattempt)
+            mpLevelFail.start()
         }
         binding.adViewScore.loadAd(adRequest)
 
@@ -103,6 +108,14 @@ class LevelScoreFragment : Fragment() {
                 Timber.d("Review Request Not Successful")
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mpLevelPass.stop()
+        mpLevelPass.release()
+        mpLevelFail.stop()
+        mpLevelFail.release()
     }
 
 }
