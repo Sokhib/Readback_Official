@@ -23,9 +23,9 @@
 
         <ImageView
             android:id="@+id/textview_game_name"
-            android:layout_width="128dp"
-            android:layout_height="128dp"
-            android:layout_marginTop="112dp"
+            android:layout_width="@dimen/size_logo"
+            android:layout_height="@dimen/size_logo"
+            android:layout_marginTop="@dimen/margin_top_score_logo"
             android:contentDescription="@string/image_logo"
             android:gravity="center"
             android:minWidth="96dp"
@@ -41,7 +41,7 @@
         <TextView
             android:id="@+id/textView_score"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="@dimen/size_text_score"
             android:layout_marginHorizontal="32dp"
             android:layout_marginTop="36dp"
             android:background="@drawable/round_white_background"

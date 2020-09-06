@@ -7,4 +7,8 @@
     <dimen name="size_16dp">16dp</dimen>
     <dimen name="size_24dp">24dp</dimen>
     <dimen name="text_size_24sp">24sp</dimen>
+    <dimen name="margin_top_score_logo">112dp</dimen>
+    <dimen name="size_logo">128dp</dimen>
+    <dimen name="size_text_score">200dp</dimen>
+
 </resources>
