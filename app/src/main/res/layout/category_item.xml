@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="categoryItemViewState"
+            type="com.sokhibdzhon.readback.ui.settings.CategoryItemViewState" />
+    </data>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/linearCategory"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/size_8dp"
+        android:elevation="@dimen/size_8dp"
+        android:orientation="horizontal"
+        android:padding="@dimen/size_8dp"
+        app:linearBackground="@{categoryItemViewState.isClicked}">
+
+        <TextView
+            android:id="@+id/textview_category_name"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@{categoryItemViewState.categoryName}"
+            android:textAppearance="@style/TextAppearance.AppTheme.Display.Black"
+            tools:text="Sport" />
+
+        <ImageView
+            android:id="@+id/view_category_logo"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginEnd="@dimen/size_8dp"
+            android:contentDescription="@string/category_image"
+            android:minWidth="48dp"
+            android:minHeight="48dp"
+            app:imageResource="@{categoryItemViewState.categoryLogo}"
+            tools:background="@drawable/ic_custom" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</layout>
