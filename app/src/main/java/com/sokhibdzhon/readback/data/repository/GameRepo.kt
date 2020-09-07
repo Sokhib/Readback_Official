@@ -23,6 +23,10 @@ interface GameRepo {
     fun getSkips(type: GameType): Int
     fun updateBestScore(bestScore: Int)
     fun updateLevel()
+    fun updateCustomTime(time: Int)
+    fun updateCustomSkips(skips: Int)
     val bestScore: Int
     val level: Int
+    val customTime: Int
+    val customSkips: Int
 }

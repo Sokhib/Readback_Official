@@ -216,7 +216,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/text_option_4"
-                app:skipText="@{gmviewmodel.skipNumber}"
+                app:customSkipText="@{gmviewmodel.skipNumber}"
                 tools:text="@string/skip" />
 
         </androidx.constraintlayout.motion.widget.MotionLayout>

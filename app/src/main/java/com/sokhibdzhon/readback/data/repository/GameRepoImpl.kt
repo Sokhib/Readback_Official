@@ -26,24 +26,26 @@ class GameRepoImpl @Inject constructor(
     GameRepo {
 
     override fun getCustomGameWords(level: Int, type: GameType): Flow<Resource<MutableList<Word>>> {
-        return if (type == GameType.CUSTOMGAME)
-            customGameDataSourceImpl.getWords()
-        else {
-            customGameDataSourceImpl.getWords(level.toString())
+        return when (type) {
+            GameType.CUSTOMGAME -> customGameDataSourceImpl.getWords(GameType.CUSTOMGAME.type)
+            GameType.SPORTSGAME -> customGameDataSourceImpl.getWords(GameType.SPORTSGAME.type)
+            else -> {
+                customGameDataSourceImpl.getWords(level.toString())
+            }
         }
     }
 
     override fun getTimeLeft(type: GameType): Long =
         when (type) {
-            GameType.CUSTOMGAME -> sharedPref.getInt(Constants.CUSTOM_SECONDS, 15).toLong()
             GameType.LEVELSGAME -> sharedPref.getInt(Constants.LEVEL_SECONDS, 30).toLong()
+            else -> sharedPref.getInt(Constants.CUSTOM_SECONDS, 15).toLong()
         }
 
     override
     fun getSkips(type: GameType): Int =
         when (type) {
-            GameType.CUSTOMGAME -> sharedPref.getInt(Constants.CUSTOM_SKIPS, 1)
             GameType.LEVELSGAME -> Random.nextInt(1, 3)
+            else -> sharedPref.getInt(Constants.CUSTOM_SKIPS, 1)
         }
 
     override fun updateBestScore(bestScore: Int) {
@@ -54,9 +56,21 @@ class GameRepoImpl @Inject constructor(
         sharedPref.edit().putInt(Constants.LEVEL, sharedPref.getInt(Constants.LEVEL, 1) + 1).apply()
     }
 
+    override fun updateCustomTime(time: Int) {
+        sharedPref.edit().putInt(Constants.CUSTOM_SECONDS, time).apply()
+    }
+
+    override fun updateCustomSkips(skips: Int) {
+        sharedPref.edit().putInt(Constants.CUSTOM_SKIPS, skips).apply()
+    }
+
     override val bestScore: Int
         get() = sharedPref.getInt(Constants.BEST_SCORE, 0)
     override val level: Int
         get() = sharedPref.getInt(Constants.LEVEL, 1)
+    override val customTime: Int
+        get() = sharedPref.getInt(Constants.CUSTOM_SECONDS, 15)
+    override val customSkips: Int
+        get() = sharedPref.getInt(Constants.CUSTOM_SKIPS, 0)
 }
 

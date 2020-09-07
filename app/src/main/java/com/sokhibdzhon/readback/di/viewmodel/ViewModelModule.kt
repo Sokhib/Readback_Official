@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.sokhibdzhon.readback.ui.game.GameViewModel
 import com.sokhibdzhon.readback.ui.levelscore.LevelScoreViewModel
 import com.sokhibdzhon.readback.ui.score.ScoreViewModel
+import com.sokhibdzhon.readback.ui.settings.SettingsViewModel
 import com.sokhibdzhon.readback.ui.start.StartViewModel
 import dagger.Binds
 import dagger.Module
@@ -43,4 +44,9 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelMapKey(LevelScoreViewModel::class)
     internal abstract fun bindGameScoreViewModel(viewModel: LevelScoreViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelMapKey(SettingsViewModel::class)
+    internal abstract fun bindSettingsViewModel(viewModel: SettingsViewModel): ViewModel
 }

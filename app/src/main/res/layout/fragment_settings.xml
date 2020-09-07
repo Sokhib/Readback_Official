@@ -5,6 +5,9 @@
 
     <data>
 
+        <variable
+            name="settingsViewModel"
+            type="com.sokhibdzhon.readback.ui.settings.SettingsViewModel" />
     </data>
 
     <androidx.appcompat.widget.LinearLayoutCompat
@@ -76,7 +79,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="@dimen/size_16dp"
-                android:textAppearance="@style/TextAppearance.AppTheme.Display.Black" />
+                android:textAppearance="@style/TextAppearance.AppTheme.Display.Black"
+                app:customTimeText="@{settingsViewModel.customTime}" />
 
             <com.xw.repo.BubbleSeekBar
                 android:id="@+id/seekbar_skips"
@@ -104,7 +108,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="@dimen/size_16dp"
-                android:textAppearance="@style/TextAppearance.AppTheme.Display.Black" />
+                android:textAppearance="@style/TextAppearance.AppTheme.Display.Black"
+                app:customSkipText="@{settingsViewModel.customSkips}" />
         </LinearLayout>
 
         <TextView

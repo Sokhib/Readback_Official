@@ -12,6 +12,7 @@
     <string name="image_logo">image logo</string>
     <string name="seconds">%1$d seconds</string>
     <string name="skips">%1$d skips</string>
+    <string name="level">LEVEL %1$d</string>
     <string name="skips_left">%1$s skips left</string>
     <string name="settings_icon">settings</string>
     <string name="continue_game">CONTINUE</string>
