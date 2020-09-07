@@ -208,15 +208,7 @@ class GameFragment : Fragment(), View.OnClickListener {
 
     private fun gameFinished() {
         val action: NavDirections
-        if (args.type == GameType.CUSTOMGAME) {
-            action =
-                GameFragmentDirections.actionGameFragmentToScoreFragment(viewModel.score.value ?: 0)
-            with(findNavController()) {
-                if (currentDestination != graph[R.id.scoreFragment] || currentDestination != graph[R.id.levelScoreFragment]) {
-                    navigate(action)
-                }
-            }
-        } else {
+        if (args.type == GameType.LEVELSGAME) {
             if (viewModel.isCorrect()!!) {
                 action =
                     GameFragmentDirections.actionGameFragmentToLevelScoreFragment(LevelResult.SUCCESS)
@@ -232,6 +224,14 @@ class GameFragment : Fragment(), View.OnClickListener {
                 } else {
                     viewModel.updateAdWatch()
                     showAlertDialog()
+                }
+            }
+        } else {
+            action =
+                GameFragmentDirections.actionGameFragmentToScoreFragment(viewModel.score.value ?: 0)
+            with(findNavController()) {
+                if (currentDestination != graph[R.id.scoreFragment] || currentDestination != graph[R.id.levelScoreFragment]) {
+                    navigate(action)
                 }
             }
         }
