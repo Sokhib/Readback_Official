@@ -53,6 +53,13 @@ class LevelScoreFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.level_score_fragment, container, false)
         viewModel = ViewModelProvider(this, viewModelFactory).get(LevelScoreViewModel::class.java)
         levelResult = args.result
+        binding.adViewScore.loadAd(adRequest)
+
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         if (levelResult == LevelResult.SUCCESS) {
             binding.animationViewLottie.setAnimation(R.raw.partypopper)
             mpLevelPass.start()
@@ -66,14 +73,6 @@ class LevelScoreFragment : Fragment() {
             binding.animationViewLottie.setAnimation(R.raw.failedattempt)
             mpLevelFail.start()
         }
-        binding.adViewScore.loadAd(adRequest)
-
-        return binding.root
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
         viewModel.isSaved.onEach { isSaved ->
             if (!isSaved && levelResult == LevelResult.SUCCESS) {
                 viewModel.updateLevel()
@@ -84,7 +83,6 @@ class LevelScoreFragment : Fragment() {
             val direction = LevelScoreFragmentDirections.actionLevelScoreFragmentToStartFragment()
             this.findNavController().navigate(direction)
         }
-
     }
 
     private fun initReview() {

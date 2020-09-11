@@ -58,6 +58,7 @@ class GameFragment : Fragment(), View.OnClickListener {
     //Maybe get this by di?
     private val mpIncorrect by lazy { MediaPlayer.create(requireContext(), R.raw.wrong) }
     private val mpCorrect by lazy { MediaPlayer.create(requireContext(), R.raw.correct) }
+    private var alertDialog: AlertDialog? = null
     override fun onAttach(context: Context) {
         super.onAttach(context)
         (requireActivity().applicationContext as BaseApplication).appGraph.inject(this)
@@ -210,10 +211,12 @@ class GameFragment : Fragment(), View.OnClickListener {
         val action: NavDirections
         if (args.type == GameType.LEVELSGAME) {
             if (viewModel.isCorrect()!!) {
-                action =
-                    GameFragmentDirections.actionGameFragmentToLevelScoreFragment(LevelResult.SUCCESS)
                 with(findNavController()) {
                     if (currentDestination != graph[R.id.scoreFragment] || currentDestination != graph[R.id.levelScoreFragment]) {
+                        action =
+                            GameFragmentDirections.actionGameFragmentToLevelScoreFragment(
+                                LevelResult.SUCCESS
+                            )
                         navigate(action)
                     }
                 }
@@ -227,10 +230,12 @@ class GameFragment : Fragment(), View.OnClickListener {
                 }
             }
         } else {
-            action =
-                GameFragmentDirections.actionGameFragmentToScoreFragment(viewModel.score.value ?: 0)
             with(findNavController()) {
                 if (currentDestination != graph[R.id.scoreFragment] || currentDestination != graph[R.id.levelScoreFragment]) {
+                    action =
+                        GameFragmentDirections.actionGameFragmentToScoreFragment(
+                            viewModel.score.value ?: 0
+                        )
                     navigate(action)
                 }
             }
@@ -239,7 +244,7 @@ class GameFragment : Fragment(), View.OnClickListener {
     }
 
     private fun showAlertDialog() {
-        AlertDialog.Builder(requireActivity())
+        alertDialog = AlertDialog.Builder(requireActivity())
             .setTitle(getString(R.string.continue_alert))
             .setMessage(getString(R.string.want_watch_ad))
             .setPositiveButton(getString(R.string.yes)) { dialog, _ ->
@@ -316,7 +321,9 @@ class GameFragment : Fragment(), View.OnClickListener {
                 navigateToFail()
             }
             .setCancelable(false)
-            .create().show()
+            .create().also {
+                it.show()
+            }
     }
 
     private fun setOptionBackground(v: View, isCorrect: Boolean) {
@@ -358,18 +365,28 @@ class GameFragment : Fragment(), View.OnClickListener {
     }
 
     private fun navigateToFail() {
-        val direction =
-            GameFragmentDirections.actionGameFragmentToLevelScoreFragment(
-                LevelResult.FAIL
-            )
         with(findNavController()) {
             if (currentDestination != graph[R.id.scoreFragment] || currentDestination != graph[R.id.levelScoreFragment]) {
+                val direction =
+                    GameFragmentDirections.actionGameFragmentToLevelScoreFragment(
+                        LevelResult.FAIL
+                    )
                 navigate(direction)
             }
         }
     }
 
+    private fun cancelAlertDialog(alert: AlertDialog?) {
+        if (alert != null) {
+            if (alert.isShowing) {
+                alert.cancel()
+                alert.dismiss()
+            }
+        }
+    }
+
     override fun onDestroy() {
+        cancelAlertDialog(alertDialog)
         super.onDestroy()
         mpCorrect.stop()
         mpCorrect.release()
