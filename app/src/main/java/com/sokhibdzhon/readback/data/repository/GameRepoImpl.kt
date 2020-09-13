@@ -27,10 +27,9 @@ class GameRepoImpl @Inject constructor(
 
     override fun getCustomGameWords(level: Int, type: GameType): Flow<Resource<MutableList<Word>>> {
         return when (type) {
-            GameType.CUSTOMGAME -> customGameDataSourceImpl.getWords(GameType.CUSTOMGAME.type)
-            GameType.SPORTSGAME -> customGameDataSourceImpl.getWords(GameType.SPORTSGAME.type)
+            GameType.LEVELSGAME -> customGameDataSourceImpl.getWords(level.toString())
             else -> {
-                customGameDataSourceImpl.getWords(level.toString())
+                customGameDataSourceImpl.getWords(GameType.CUSTOMGAME.type)
             }
         }
     }

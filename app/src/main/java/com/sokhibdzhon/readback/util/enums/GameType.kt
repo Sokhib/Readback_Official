@@ -9,6 +9,7 @@ package com.sokhibdzhon.readback.util.enums
 ╚═══════════════════════════════════════╝
  */
 
-enum class GameType(val type: String) {
-    CUSTOMGAME("custom"), LEVELSGAME("1"), SPORTSGAME("sport")
+enum class GameType(var type: String) {
+    CUSTOMGAME("custom"),
+    LEVELSGAME("1")
 }

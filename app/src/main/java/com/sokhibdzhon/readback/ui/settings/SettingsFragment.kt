@@ -11,7 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.sokhibdzhon.readback.BaseApplication
 import com.sokhibdzhon.readback.R
-import com.sokhibdzhon.readback.data.model.Category
+import com.sokhibdzhon.readback.data.model.Categories
 import com.sokhibdzhon.readback.databinding.FragmentSettingsBinding
 import com.xw.repo.BubbleSeekBar
 import javax.inject.Inject
@@ -28,21 +28,11 @@ class SettingsFragment : Fragment() {
     @Inject
     lateinit var categoryAdapter: CategoryAdapter
 
-    private lateinit var categories: List<Category>
+    private val categories by lazy { Categories.getCategoriesList() }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         (requireActivity().applicationContext as BaseApplication).appGraph.inject(this)
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        categories = listOf(
-            Category("Custom", R.drawable.ic_custom, true),
-            Category("Sport", R.drawable.ic_sport),
-            Category("Travel", R.drawable.ic_travel),
-            Category("Fruit", R.drawable.ic_fruit)
-        )
     }
 
     override fun onCreateView(
@@ -55,9 +45,6 @@ class SettingsFragment : Fragment() {
             lifecycleOwner = viewLifecycleOwner
             settingsViewModel = viewModel
         }
-
-
-
         return binding.root
     }
 
@@ -70,7 +57,6 @@ class SettingsFragment : Fragment() {
         binding.recyclerviewCategory.apply {
             adapter = categoryAdapter
         }
-        //Getting data from viewModel or Repo and setting adapter data
         categoryAdapter.setCategoryList(categories)
         categoryAdapter.onCategoryItemClicked = { position, categoryName ->
             categoryAdapter.setCheckedState(position)

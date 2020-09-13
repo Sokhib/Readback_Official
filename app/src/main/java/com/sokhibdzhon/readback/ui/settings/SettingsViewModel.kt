@@ -65,10 +65,8 @@ class SettingsViewModel @Inject constructor(private val gameRepoImpl: GameRepoIm
     }
 
     fun setCategoryType(categoryName: String) {
-        _category.value = when (categoryName) {
-            GameType.SPORTSGAME.type -> GameType.SPORTSGAME
-            else -> GameType.CUSTOMGAME
-        }
+        GameType.CUSTOMGAME.type = categoryName
+        _category.value = GameType.CUSTOMGAME
     }
 
 }
