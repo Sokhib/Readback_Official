@@ -28,9 +28,21 @@ class SettingsFragment : Fragment() {
     @Inject
     lateinit var categoryAdapter: CategoryAdapter
 
+    private lateinit var categories: List<Category>
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         (requireActivity().applicationContext as BaseApplication).appGraph.inject(this)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        categories = listOf(
+            Category("Custom", R.drawable.ic_custom, true),
+            Category("Sport", R.drawable.ic_sport),
+            Category("Travel", R.drawable.ic_travel),
+            Category("Fruit", R.drawable.ic_fruit)
+        )
     }
 
     override fun onCreateView(
@@ -59,14 +71,7 @@ class SettingsFragment : Fragment() {
             adapter = categoryAdapter
         }
         //Getting data from viewModel or Repo and setting adapter data
-        categoryAdapter.setCategoryList(
-            listOf(
-                Category("Custom", R.drawable.ic_custom, true),
-                Category("Sport", R.drawable.ic_sport),
-                Category("Travel", R.drawable.ic_travel),
-                Category("Fruit", R.drawable.ic_fruit)
-            )
-        )
+        categoryAdapter.setCategoryList(categories)
         categoryAdapter.onCategoryItemClicked = { position, categoryName ->
             categoryAdapter.setCheckedState(position)
             viewModel.setCategoryType(categoryName)

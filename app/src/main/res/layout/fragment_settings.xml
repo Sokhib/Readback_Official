@@ -49,7 +49,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:layout_margin="@dimen/size_8dp"
+            android:layout_margin="@dimen/size_4dp"
             android:orientation="vertical"
             android:padding="@dimen/size_8dp">
 
@@ -78,7 +78,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_margin="@dimen/size_16dp"
+                android:layout_margin="@dimen/size_8dp"
                 android:textAppearance="@style/TextAppearance.AppTheme.Display.Black"
                 app:customTimeText="@{settingsViewModel.customTime}" />
 
@@ -107,7 +107,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_margin="@dimen/size_16dp"
+                android:layout_margin="@dimen/size_8dp"
                 android:textAppearance="@style/TextAppearance.AppTheme.Display.Black"
                 app:customSkipText="@{settingsViewModel.customSkips}" />
         </LinearLayout>
