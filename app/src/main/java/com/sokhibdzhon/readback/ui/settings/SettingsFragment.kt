@@ -8,11 +8,13 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.sokhibdzhon.readback.BaseApplication
 import com.sokhibdzhon.readback.R
 import com.sokhibdzhon.readback.data.model.Categories
 import com.sokhibdzhon.readback.databinding.FragmentSettingsBinding
+import com.sokhibdzhon.readback.util.enums.GameType
 import com.xw.repo.BubbleSeekBar
 import javax.inject.Inject
 
@@ -44,6 +46,11 @@ class SettingsFragment : Fragment() {
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
             settingsViewModel = viewModel
+        }
+        //Fix hardcoded
+        lifecycleScope.launchWhenStarted {
+            GameType.CUSTOMGAME.type = "custom"
+            viewModel.setCategoryType(GameType.CUSTOMGAME.type)
         }
         return binding.root
     }

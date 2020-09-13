@@ -15,7 +15,7 @@ import timber.log.Timber
  */
 
 class BaseApplication : Application() {
-    val appGraph: AppComponent = DaggerAppComponent.factory().create(this)
+    val appGraph: AppComponent by lazy { DaggerAppComponent.factory().create(this) }
     override fun onCreate() {
         super.onCreate()
         if (BuildConfig.DEBUG)

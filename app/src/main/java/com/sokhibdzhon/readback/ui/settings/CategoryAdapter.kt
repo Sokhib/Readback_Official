@@ -4,6 +4,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.sokhibdzhon.readback.data.model.Category
 import javax.inject.Inject
+import javax.inject.Singleton
 
 
 /**     I ❤ Code:)
@@ -13,7 +14,7 @@ import javax.inject.Inject
 ║ sokhibsaid@gmail.com                  ║
 ╚═══════════════════════════════════════╝
  */
-
+@Singleton
 class CategoryAdapter @Inject constructor() : RecyclerView.Adapter<CategoryViewHolder>() {
 
     private val categoryList = arrayListOf<Category>()

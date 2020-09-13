@@ -38,6 +38,7 @@ class AppModule {
     fun provideRewardedAd(context: Context): RewardedAd =
         RewardedAd(context, "ca-app-pub-3940256099942544/5224354917")
 
+    @Singleton
     @Provides
     fun provideCategoryAdapter() = CategoryAdapter()
 }
